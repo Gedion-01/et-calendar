@@ -1,0 +1,219 @@
+/* TimePicker.css */
+
+/* Define CSS Variables */
+:root {
+  --border-color: #d1d5db;
+  --background-color: #ffffff;
+  --text-color: #374151;
+  --placeholder-color: #9ca3af;
+  --popover-background-color: #ffffff;
+  --popover-border-color: #e5e7eb;
+  --popover-shadow-color: rgba(0, 0, 0, 0.1);
+  --heading-color: #111827;
+  --time-format-label-color: #6b7280;
+  --switch-background-color: #e5e7eb;
+  --switch-thumb-color: #ffffff;
+  --divider-color: #d1d5db;
+  --active-color: #2563eb;
+  --active-hover-color: #1e40af;
+  --am-pm-button-background-color: #f3f4f6;
+  --am-pm-button-hover-background-color: #e5e7eb;
+  --active-am-pm-button-background-color: #2563eb;
+  --active-am-pm-button-hover-background-color: #1e40af;
+}
+
+/* Trigger Button */
+.trigger-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.trigger-button .icon {
+  margin-right: 0.5rem;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.time-display {
+  font-size: medium;
+  color: var(--text-color);
+}
+
+.time-display.placeholder {
+  color: var(--placeholder-color); /* Gray color for placeholder */
+}
+
+/* Popover Content */
+.popover-content {
+  background-color: var(--popover-background-color);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px var(--popover-shadow-color);
+  border: 1px solid var(--popover-border-color);
+  width: 18rem;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.heading {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+.time-format-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.time-format-label {
+  font-size: 0.875rem;
+  color: var(--time-format-label-color);
+  margin-right: 0.5rem;
+}
+
+.switch-root {
+  all: unset;
+  width: 42px;
+  height: 25px;
+  background-color: var(--switch-background-color);
+  border-radius: 9999px;
+  position: relative;
+  box-shadow: 0 2px 10px var(--switch-background-color);
+  -webkit-tap-highlight-color: transparent;
+  &:focus {
+    box-shadow: 0 0 0 2px var(--active-color);
+  }
+  &[data-state="checked"] {
+    background-color: var(--active-color);
+  }
+}
+
+/* Target the switch root element */
+.switch-root:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--active-color);
+}
+
+.switch-thumb {
+  display: block;
+  width: 21px;
+  height: 21px;
+  background-color: var(--switch-thumb-color);
+  border-radius: 100%;
+  transition: transform 100ms;
+  transform: translateX(2px);
+  will-change: transform;
+  &[data-state="checked"] {
+    transform: translateX(19px);
+  }
+}
+
+
+/* Time Sections */
+.time-sections {
+  display: flex;
+  gap: 1rem;
+}
+
+.time-section {
+  flex: 1;
+}
+
+.time-section-title {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.timeSectionWrapper {
+  position: relative;
+}
+
+.dividerWrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.dividerWrapper .divider {
+  height: 2.25rem;
+  width: 100%;
+  border-top: 1px solid var(--divider-color);
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.divider {
+  /* Optional additional styles for divider if needed */
+}
+
+.time-list {
+  height: 8rem;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+.time-item {
+  cursor: pointer;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.active {
+  color: var(--active-color);
+  font-weight: bold;
+}
+
+.spacer {
+  height: calc(50% - 18px);
+}
+
+/* AM/PM Buttons */
+.am-pm-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.am-pm-button {
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  background-color: var(--am-pm-button-background-color);
+  color: var(--text-color);
+  border: none;
+  cursor: pointer;
+}
+
+.am-pm-button:hover {
+  background-color: var(--am-pm-button-hover-background-color);
+}
+
+.active-am-pm-button {
+  background-color: var(--active-am-pm-button-background-color);
+  color: var(--switch-thumb-color);
+}
+
+.active-am-pm-button:hover {
+  background-color: var(--active-am-pm-button-hover-background-color);
+}
+
+/* Popover Arrow */
+.popover-arrow {
+  fill: var(--popover-background-color);
+}

@@ -1,0 +1,241 @@
+/* Calendar.css */
+
+/* Define CSS Variables */
+:root {
+  --border-color: #d1d5db;
+  --background-color: #ffffff;
+  --text-color: #1f2937;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+  --hover-background-color: #f3f4f6;
+  --selected-background-color: #2563eb;
+  --selected-hover-background-color: #1e40af;
+  --today-background-color: #e5e7eb;
+  --today-hover-background-color: #d1d5db;
+  --button-text-color: #374151;
+  --selected-text-color: #ffffff;
+  --weekday-text-color: #6b7280;
+}
+
+/* Container */
+.calendar-container {
+  width: 280px;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  box-shadow: 0 1px 2px var(--shadow-color);
+}
+
+/* Header */
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+/* Navigation Buttons */
+.nav-button {
+  padding: 0.25rem;
+  background: none;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.nav-button:hover {
+  background-color: var(--hover-background-color);
+}
+.icon {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+/* Month and Year Button */
+.month-year-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: none;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.month-year-button:hover {
+  background-color: var(--hover-background-color);
+}
+
+/* Weekdays */
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+  padding: 0.5rem;
+}
+
+.weekday {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--weekday-text-color);
+}
+
+/* Day Cells */
+.day-cell {
+  height: 2rem;
+  width: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Empty Day Cell */
+.empty-day-cell {
+  height: 2rem; /* Equivalent to 'h-8' */
+  width: 2rem; /* Equivalent to 'w-8' */
+}
+
+/* Day Buttons */
+.day-button {
+  height: 2rem;
+  width: 2rem;
+  font-size: 0.875rem;
+  background: none;
+  border: none;
+  border-radius: 0.375rem;
+  color: var(--button-text-color);
+  cursor: pointer;
+}
+
+.day-button:hover {
+  background-color: var(--hover-background-color);
+}
+
+/* Selected Day */
+.day-button.selected {
+  background-color: var(--selected-background-color);
+  color: var(--selected-text-color);
+}
+
+.day-button.selected:hover {
+  background-color: var(--selected-hover-background-color);
+}
+
+/* Today's Date */
+.day-button.today {
+  background-color: var(--today-background-color);
+  color: var(--text-color);
+}
+
+.day-button.today:hover {
+  background-color: var(--today-hover-background-color);
+}
+
+/* Month View Container */
+.month-view {
+  padding: 0.5rem; /* Replaces 'p-2' */
+}
+
+/* Month Grid */
+.month-grid {
+  display: grid; /* Replaces 'grid' */
+  grid-template-columns: repeat(3, 1fr); /* Replaces 'grid-cols-3' */
+  gap: 0.5rem; /* Replaces 'gap-2' */
+}
+
+/* Month Button */
+.month-button {
+  padding: 0.5rem; /* Replaces 'p-2' */
+  border-radius: 0.375rem; /* Replaces 'rounded-md' */
+  font-size: 0.875rem; /* Replaces 'text-sm' */
+  background: none;
+  border: none;
+  color: var(--button-text-color); /* Replaces 'text-gray-700' */
+  cursor: pointer;
+}
+
+.month-button:hover {
+  background-color: var(
+    --hover-background-color
+  ); /* Replaces 'hover:bg-gray-100' */
+}
+
+/* Selected Month Button */
+.month-button.selected {
+  background-color: var(
+    --selected-background-color
+  ); /* Replaces 'bg-blue-600' */
+  color: var(--selected-text-color); /* Replaces 'text-white' */
+}
+
+.month-button.selected:hover {
+  background-color: var(
+    --selected-hover-background-color
+  ); /* Replaces 'hover:bg-blue-700' */
+}
+
+/* Year View Container */
+.year-view {
+  padding: 0.5rem; /* Replaces 'p-2' */
+}
+
+/* Year Grid */
+.year-grid {
+  display: grid; /* Replaces 'grid' */
+  grid-template-columns: repeat(4, 1fr); /* Replaces 'grid-cols-4' */
+  gap: 0.5rem; /* Replaces 'gap-2' */
+  height: 280px; /* Replaces 'h-[280px]' */
+  overflow-y: auto; /* Replaces 'overflow-y-auto' */
+}
+
+/* Year Button */
+.year-button {
+  padding: 0.5rem; /* Replaces 'p-2' */
+  border-radius: 0.375rem; /* Replaces 'rounded-md' */
+  font-size: 0.875rem; /* Replaces 'text-sm' */
+  background: none;
+  border: none;
+  color: var(--button-text-color); /* Replaces 'text-gray-700' */
+  cursor: pointer;
+}
+
+.year-button:hover {
+  background-color: var(
+    --hover-background-color
+  ); /* Replaces 'hover:bg-gray-100' */
+}
+
+/* Selected Year Button */
+.year-button.selected {
+  background-color: var(
+    --selected-background-color
+  ); /* Replaces 'bg-blue-600' */
+  color: var(--selected-text-color); /* Replaces 'text-white' */
+}
+
+.year-button.selected:hover {
+  background-color: var(
+    --selected-hover-background-color
+  ); /* Replaces 'hover:bg-blue-700' */
+}
+
+/* Year Display Button */
+.year-display-button {
+  width: 100%; /* Replaces 'w-full' */
+  padding: 0.5rem; /* Replaces 'p-2' */
+  font-size: 1.125rem; /* Replaces 'text-lg' */
+  font-weight: 600; /* Replaces 'font-semibold' */
+  margin-bottom: 1rem; /* Replaces 'mb-4' */
+  background: none;
+  border: none;
+  border-radius: 0.375rem; /* Replaces 'rounded-md' */
+  cursor: pointer;
+}
+
+.year-display-button:hover {
+  background-color: var(
+    --hover-background-color
+  ); /* Replaces 'hover:bg-gray-100' */
+}
