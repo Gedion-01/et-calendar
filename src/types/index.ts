@@ -75,7 +75,7 @@ export interface DatePickerProps {
   selectedDate?: Date;
   onDateChange: (date: Date) => void;
   showCalendars: "ethiopian" | "gregorian" | "both";
-  viewAs?: "Ethiopian" | "Gregorian";
+  viewFirst?: "Ethiopian" | "Gregorian";
   dateFormat?: string;
   datePickerClassNames?: DatePickerClassNames;
   calanderClassNames?: CalendarClassNames;
@@ -88,7 +88,7 @@ export interface DateTimePickerProps {
   selectedDate?: Date;
   onDateChange: (date: Date) => void;
   showCalendars: "ethiopian" | "gregorian" | "both";
-  viewAs?: "Ethiopian" | "Gregorian";
+  viewFirst?: "Ethiopian" | "Gregorian";
   dateFormat?: string;
   timeFormat?: TimeFormat;
   datePickerClassNames?: DatePickerClassNames;

@@ -14,7 +14,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   selectedDate,
   onDateChange,
   showCalendars,
-  viewAs = "Gregorian",
+  viewFirst = "Gregorian",
   dateFormat = "MMMM dd, yyyy",
   datePickerClassNames = {},
   calanderClassNames = {},
@@ -29,12 +29,12 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   useEffect(() => {
     if (showCalendars === "both") {
-      setActiveTab(viewAs === "Ethiopian" ? "ethiopian" : "gregorian");
+      setActiveTab(viewFirst === "Ethiopian" ? "ethiopian" : "gregorian");
     }
-  }, [showCalendars, viewAs]);
+  }, [showCalendars, viewFirst]);
 
   const formattedDate =
-    selectedDate && viewAs === "Ethiopian"
+    selectedDate && viewFirst === "Ethiopian"
       ? useFormattedEthiopianDate(EthiopianDate.toEth(selectedDate), dateFormat)
       : selectedDate
       ? useFormattedDate(selectedDate, dateFormat)

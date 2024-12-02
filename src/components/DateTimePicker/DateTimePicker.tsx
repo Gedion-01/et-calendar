@@ -15,7 +15,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   selectedDate,
   onDateChange,
   showCalendars,
-  viewAs = "Gregorian",
+  viewFirst = "Gregorian",
   dateFormat = "MMMM dd, yyyy",
   timeFormat = "12h",
   datePickerClassNames = {},
@@ -37,9 +37,9 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
 
   useEffect(() => {
     if (showCalendars === "both") {
-      setActiveTab(viewAs === "Ethiopian" ? "ethiopian" : "gregorian");
+      setActiveTab(viewFirst === "Ethiopian" ? "ethiopian" : "gregorian");
     }
-  }, [showCalendars, viewAs]);
+  }, [showCalendars, viewFirst]);
 
   const handleTimeChange = (newTime: string) => {
     setTime(newTime);
@@ -58,7 +58,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   };
 
   const formattedDate =
-    selectedDate && viewAs === "Ethiopian"
+    selectedDate && viewFirst === "Ethiopian"
       ? useFormattedEthiopianDate(EthiopianDate.toEth(selectedDate), dateFormat)
       : selectedDate
       ? useFormattedDate(selectedDate, dateFormat)
