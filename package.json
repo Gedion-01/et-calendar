@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "ethio-calendar-toolkit",
   "version": "0.0.1",
   "description": "A React calendar toolkit for Ethiopian and Gregorian dates",
@@ -6,8 +7,11 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
+    "rollup": "rollup -c --bundleConfigAsCjs",
     "test": "npx jest",
-    "rollup": "rollup -c --bundleConfigAsCjs"
+    "test:watch": "jest --watch",
+    "yalc:publish": "yalc publish && yalc push",
+    "watch:yalc": "rollup -c -w --bundleConfigAsCjs & yalc push --changed"
   },
   "author": "",
   "license": "ISC",
