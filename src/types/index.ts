@@ -76,7 +76,7 @@ export interface DatePickerProps {
   onDateChange: (date: Date) => void;
   showCalendars: "ethiopian" | "gregorian" | "both";
   viewFirst?: "Ethiopian" | "Gregorian";
-  dateFormat?: string;
+  dateFormat?: string; // Note: Time-related tokens will be ignored
   datePickerClassNames?: DatePickerClassNames;
   calanderClassNames?: CalendarClassNames;
   popoverProps?: PopoverProps;
@@ -89,7 +89,7 @@ export interface DateTimePickerProps {
   onDateChange: (date: Date) => void;
   showCalendars: "ethiopian" | "gregorian" | "both";
   viewFirst?: "Ethiopian" | "Gregorian";
-  dateFormat?: string;
+  dateFormat?: string; // Note: Time-related tokens will be ignored
   timeFormat?: TimeFormat;
   datePickerClassNames?: DatePickerClassNames;
   timePickerClassNames?: TimePickerClassNames;
