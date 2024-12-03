@@ -10,6 +10,7 @@ import { EthiopianDate } from "../../lib/ethiopian-date";
 import { useFormattedEthiopianDate } from "../../hooks/useFormattedEthiopianDateTime";
 import { DateTimePickerProps } from "../../types";
 import "./DateTImePicker.css";
+import { sanitizeDateFormat } from "../../utils/sanitizeDateFormat";
 
 export const DateTimePicker: React.FC<DateTimePickerProps> = ({
   selectedDate,
@@ -57,12 +58,17 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     onDateChange(newDate);
   };
 
+  const sanitizedFormat = sanitizeDateFormat(dateFormat);
+
   const formattedDate =
     selectedDate && viewFirst === "Ethiopian"
-      ? useFormattedEthiopianDate(EthiopianDate.toEth(selectedDate), dateFormat)
+      ? useFormattedEthiopianDate(
+          EthiopianDate.toEth(selectedDate),
+          sanitizedFormat
+        )
       : selectedDate
-      ? useFormattedDate(selectedDate, dateFormat)
-      : dateFormat;
+      ? useFormattedDate(selectedDate, sanitizedFormat)
+      : sanitizedFormat;
   return (
     <div
       className={`date-time-picker-container ${

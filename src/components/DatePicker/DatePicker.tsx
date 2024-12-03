@@ -9,6 +9,7 @@ import { useFormattedEthiopianDate } from "../../hooks/useFormattedEthiopianDate
 import { EthiopianDate } from "../../lib/ethiopian-date";
 import { useFormattedDate } from "../../hooks/useFormattedDate";
 import "./DatePicker.css";
+import { sanitizeDateFormat } from "../../utils/sanitizeDateFormat";
 
 export const DatePicker: React.FC<DatePickerProps> = ({
   selectedDate,
@@ -33,12 +34,17 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     }
   }, [showCalendars, viewFirst]);
 
+  const sanitizedFormat = sanitizeDateFormat(dateFormat);
+
   const formattedDate =
     selectedDate && viewFirst === "Ethiopian"
-      ? useFormattedEthiopianDate(EthiopianDate.toEth(selectedDate), dateFormat)
+      ? useFormattedEthiopianDate(
+          EthiopianDate.toEth(selectedDate),
+          sanitizedFormat
+        )
       : selectedDate
-      ? useFormattedDate(selectedDate, dateFormat)
-      : dateFormat;
+      ? useFormattedDate(selectedDate, sanitizedFormat)
+      : sanitizedFormat;
 
   return (
     <div
