@@ -8,10 +8,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "rollup": "rollup -c --bundleConfigAsCjs",
-    "test": "npx jest",
-    "test:watch": "jest --watch",
-    "yalc:publish": "yalc publish && yalc push",
-    "watch:yalc": "rollup -c -w --bundleConfigAsCjs & yalc push --changed"
+    "test": "jest",
+    "watch:dev": "rollup -c -w --bundleConfigAsCjs"
   },
   "author": "",
   "license": "ISC",
