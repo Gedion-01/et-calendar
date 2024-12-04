@@ -57,7 +57,6 @@ interface TimePickerClassNames {
   amPmButtons?: string;
   amPmButton?: string;
   activeAmPmButton?: string;
-  popoverArrow?: string;
   placeholder?: string;
 }
 
