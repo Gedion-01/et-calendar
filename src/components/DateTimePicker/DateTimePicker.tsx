@@ -52,7 +52,7 @@ export const DateTimePicker: React.FC<DateTimePickerProps> = ({
     } else if (period === "AM" && hours24 === 12) {
       hours24 = 0;
     }
-    // const newDate = selectedDate ?  Date(selectedDate) : new Date();
+
     const newDate = selectedDate ? new Date(selectedDate) : new Date();
     newDate.setHours(hours24, parseInt(minuteValue));
     onDateChange(newDate);

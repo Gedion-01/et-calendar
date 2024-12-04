@@ -17,10 +17,8 @@ export function EthiopianDatePicker({
   }, [selectedDate]);
 
   const handleEthDateChange = (newEthDate: EthiopianDate.EtDate) => {
-    // Convert Ethiopian date to Gregorian date
     let gregDate = EthiopianDate.toGreg(newEthDate);
 
-    // Use existing time if selectedDate is defined
     const existingDate = selectedDate as Date | undefined;
     const hours = existingDate ? existingDate.getHours() : 0;
     const minutes = existingDate ? existingDate.getMinutes() : 0;

@@ -178,24 +178,6 @@ export function Calendar({
         <div key={i} className={`day-cell ${calendarClassNames.dayCell || ""}`}>
           <button
             ref={isSelected ? selectedDateRef : null}
-            // onClick={() => {
-            //   if (isEthiopian) {
-            //     onChange({
-            //       Day: i,
-            //       Month: (viewDate as EthiopianDate.EtDate).Month,
-            //       Year: (viewDate as EthiopianDate.EtDate).Year,
-            //     });
-            //   } else {
-            //     const newDate = normalizeDate(
-            //       new Date(
-            //         (viewDate as Date).getFullYear(),
-            //         (viewDate as Date).getMonth(),
-            //         i
-            //       )
-            //     );
-            //     onChange(newDate);
-            //   }
-            // }}
             onClick={() => {
               if (isEthiopian) {
                 onChange({
@@ -241,10 +223,6 @@ export function Calendar({
   const years = isEthiopian
     ? Array.from({ length: 200 }, (_, i) => i + 1900)
     : Array.from({ length: 200 }, (_, i) => i + 1900);
-  // const maxYear = EthiopianDate.maxEurDate.getFullYear();
-  // const years = isEthiopian
-  //   ? Array.from({ length: maxYear - 1899 }, (_, i) => i + 1900)
-  //   : Array.from({ length: maxYear - 1899 }, (_, i) => i + 1900);
 
   const months = isEthiopian
     ? EthiopianDate.ethMonths.map((month, index) => ({

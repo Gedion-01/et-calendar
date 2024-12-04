@@ -70,9 +70,6 @@ export namespace EthiopianDate {
     const referenceDate = new Date(1971, 8, 12); // September 12, 1971
     const difference = gregorianDate.getTime() - referenceDate.getTime();
 
-    // we dont need this line
-    // const difference =
-    //   gregorianDate.getTime() - new Date(Date.UTC(1971, 8, 12)).getTime();
     const fourYearsPassed = Math.floor(difference / fourYears);
     let remainingYears = Math.floor(
       (difference - fourYearsPassed * fourYears) / oneYear

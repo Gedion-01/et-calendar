@@ -8,7 +8,6 @@ export const sanitizeDateFormat = (format: string): string => {
     );
   }
 
-  // Remove time tokens along with any preceding colon or space
   const sanitizedFormat = format
     .replace(timeTokensWithSeparatorsRegex, "")
     .trim();

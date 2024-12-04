@@ -47,8 +47,8 @@ interface TimePickerClassNames {
   timeSections?: string;
   timeSection?: string;
   timeSectionTitle?: string;
-  timeSectionWrapper?: string; // Renamed from 'relative'
-  dividerWrapper?: string; // Renamed from 'absolute'
+  timeSectionWrapper?: string;
+  dividerWrapper?: string;
   divider?: string;
   timeList?: string;
   timeItem?: string;
@@ -104,7 +104,6 @@ export interface CalendarProps {
   onChange: (date: any) => void;
   isEthiopian: boolean;
 
-  // Optional calanderClassNames props for customization of the calendar.
   calendarClassNames?: CalendarClassNames;
 }
 

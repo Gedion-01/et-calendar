@@ -10,8 +10,6 @@ export function useFormattedEthiopianDate(
   etDate: EthiopianDate.EtDate,
   format: string
 ): string {
-  // Create a mapping of tokens to their values, ordered by length (longest first)
-  // to prevent partial replacements
   const gregorianDate = EthiopianDate.toGreg(etDate);
   const dayOfWeek = gregorianDate.getDay();
   const tokenMap = [
@@ -32,7 +30,6 @@ export function useFormattedEthiopianDate(
     { token: "E", value: EthiopianDate.shortDays[dayOfWeek] },
   ];
 
-  // Start with the format string and replace each token
   let formatted = format;
   tokenMap.forEach(({ token, value }) => {
     const regex = new RegExp(token, "g");
@@ -46,8 +43,6 @@ export function useFormattedEthiopianDateTime(
   etDateTime: EtDateTime,
   format: string
 ): string {
-  // Create a mapping of tokens to their values, ordered by length (longest first)
-  // to prevent partial replacements
   const gregorianDate = EthiopianDate.toGreg(etDateTime);
   const daysOfWeek = gregorianDate.getDay();
   const tokenMap = [
@@ -76,7 +71,6 @@ export function useFormattedEthiopianDateTime(
     { token: "E", value: EthiopianDate.shortDays[daysOfWeek] },
   ];
 
-  // Start with the format string and replace each token
   let formatted = format;
   tokenMap.forEach(({ token, value }) => {
     const regex = new RegExp(token, "g");
