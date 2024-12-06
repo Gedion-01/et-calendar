@@ -1,14 +1,8 @@
 import { EthiopianDate } from "../lib/ethiopian-date";
 
-export interface EtDateTime extends EthiopianDate.EtDate {
-  hours: number;
-  minutes: number;
-  seconds?: number;
-}
-
 export function useFormattedEthiopianDate(
   etDate: EthiopianDate.EtDate,
-  format: string
+  format: string = "MMMM dd, yyyy"
 ): string {
   const gregorianDate = EthiopianDate.toGreg(etDate);
   const dayOfWeek = gregorianDate.getDay();
@@ -40,8 +34,8 @@ export function useFormattedEthiopianDate(
 }
 
 export function useFormattedEthiopianDateTime(
-  etDateTime: EtDateTime,
-  format: string
+  etDateTime: EthiopianDate.EtDateTime,
+  format: string = "MMMM dd, yyyy HH:mm:ss"
 ): string {
   const gregorianDate = EthiopianDate.toGreg(etDateTime);
   const daysOfWeek = gregorianDate.getDay();

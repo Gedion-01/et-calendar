@@ -2,8 +2,9 @@ import { renderHook } from "@testing-library/react";
 import {
   useFormattedEthiopianDate,
   useFormattedEthiopianDateTime,
-  EtDateTime,
 } from "../useFormattedEthiopianDateTime";
+
+import { EthiopianDate } from "../../lib/ethiopian-date";
 
 describe("useFormattedEthiopianDate", () => {
   const etDate = { Year: 2017, Month: 3, Day: 11 };
@@ -85,7 +86,7 @@ describe("useFormattedEthiopianDate", () => {
 });
 
 describe("useFormattedEthiopianDateTime", () => {
-  const etDateTime: EtDateTime = {
+  const etDateTime: EthiopianDate.EtDateTime = {
     Year: 2017,
     Month: 3,
     Day: 11,
@@ -94,7 +95,7 @@ describe("useFormattedEthiopianDateTime", () => {
     seconds: 0,
   };
 
-  const etDateTimeNight: EtDateTime = {
+  const etDateTimeNight: EthiopianDate.EtDateTime = {
     Year: 2017,
     Month: 3,
     Day: 11,

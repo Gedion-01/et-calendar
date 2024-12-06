@@ -16,6 +16,12 @@ export namespace EthiopianDate {
     Year: number;
   }
 
+  export interface EtDateTime extends EtDate {
+    hours: number;
+    minutes: number;
+    seconds?: number;
+  }
+
   export const shortDays = ["እሑ", "ሰኞ", "ማክ", "ረቡ", "ሐሙ", "ዓር", "ቅዳ"];
   export const longDays = ["እሑድ", "ሰኞ", "ማክሰኞ", "ረቡዕ", "ሐሙስ", "ዓርብ", "ቅዳሜ"];
 
