@@ -457,7 +457,7 @@ const formattedEthDateTime = useFormattedEthiopianDateTime(ethDateTime, format?)
   - `ethDateTime: EthiopianDate.EtDateTime`  
     The Ethiopian date and time to format.
   - `format?: string`  
-    Optional format string. Default is `'MMMM dd, yyyy HH:mm'`.
+    Optional format string. Default is `'MMMM dd, yyyy HH:mm:ss'`.
 
 #### Example
 
@@ -465,12 +465,13 @@ const formattedEthDateTime = useFormattedEthiopianDateTime(ethDateTime, format?)
 import { useFormattedEthiopianDateTime } from "ethio-calendar-toolkit/hooks";
 import { EthiopianDate } from "ethio-calendar-toolkit/lib";
 
-const ethDateTime: EthiopianDate.EtDateTime = {
+const ethDateTime: EtDateTime = {
   Day: 1,
   Month: 1,
   Year: 2015,
   Hour: 14,
   Minute: 30,
+  Second:
 };
 
 const formattedEthDateTime = useFormattedEthiopianDateTime(
