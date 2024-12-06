@@ -11,8 +11,21 @@
     "test": "jest",
     "watch:dev": "rollup -c -w --bundleConfigAsCjs"
   },
+  "keywords": [
+    "react",
+    "react-component",
+    "datepicker",
+    "datetimepicker",
+    "calendar",
+    "ethiopian calendar",
+    "gregorian calendar"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Gedion-01/ethio-calendar-toolkit/issues"
+  },
+  "homepage": "https://github.com/Gedion-01/ethio-calendar-toolkit#readme",
   "dependencies": {
     "lucide-react": "^0.344.0",
     "luxon": "^3.5.0"
@@ -72,14 +85,5 @@
       "require": "./dist/lib/index.js",
       "types": "./dist/lib/index.d.ts"
     }
-  },
-  "keywords": [
-    "react",
-    "react-component",
-    "datepicker",
-    "datetimepicker",
-    "calendar",
-    "ethiopian calendar",
-    "gregorian calendar"
-  ]
+  }
 }
