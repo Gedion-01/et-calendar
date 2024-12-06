@@ -86,6 +86,89 @@ const App = () => {
 export default App;
 ```
 
+### EthiopianDate Utilities
+
+The EthiopianDate namespace provides functions for converting between Ethiopian and Gregorian dates and performing date calculations.
+
+```tsx
+import { EthiopianDate } from "ethio-calendar-toolkit/lib";
+```
+
+#### Converting Gregorian Date to Ethiopian Date
+
+```ts
+import { EthiopianDate } from "ethio-calendar-toolkit/lib";
+
+const currentGregorianDate = new Date();
+const ethDate = EthiopianDate.toEth(currentGregorianDate);
+console.log(ethDate); // Outputs the Ethiopian date object
+```
+
+#### Converting Ethiopian Date to Gregorian Date
+
+```ts
+import { EthiopianDate } from "ethio-calendar-toolkit/lib";
+
+const ethDate: EthiopianDate.EtDate = {
+  Day: 1,
+  Month: 1,
+  Year: 2015,
+};
+
+const gregorianDate = EthiopianDate.toGreg(ethDate);
+console.log(gregorianDate); // Outputs the corresponding Gregorian Date
+```
+
+#### Formatting Ethiopian Dates
+
+To format Ethiopian dates or date-times, you have two options:
+
+1. **Use the provided hooks for better formatting options.**
+2. **Use the `formatEtDate` function from the EthiopianDate namespace.**
+
+##### Using Hooks for Better Formatting
+
+The toolkit offers hooks that simplify the formatting of Ethiopian dates and date-times. These hooks provide flexible formatting using familiar tokens.
+
+##### `useFormattedEthiopianDate`
+
+Formats an Ethiopian date according to a specified format string.
+
+```ts
+import { useFormattedEthiopianDate } from "ethio-calendar-toolkit";
+import { EthiopianDate } from "ethio-calendar-toolkit/lib";
+
+const ethDate: EthiopianDate.EtDate = {
+  Day: 1,
+  Month: 1,
+  Year: 2015,
+};
+
+const formattedEthDate = useFormattedEthiopianDate(ethDate, "MMMM dd, yyyy");
+console.log(formattedEthDate); // Outputs: "መስከረም 01, 2015"
+```
+
+##### Using formatEtDate Function from the Library
+
+Alternatively, you can use the formatEtDate function provided in the EthiopianDate namespace for formatting.
+
+```ts
+import { EthiopianDate } from "ethio-calendar-toolkit/lib";
+
+const ethDate: EthiopianDate.EtDate = {
+  Day: 1,
+  Month: 1,
+  Year: 2015,
+};
+
+const formattedEthDate = EthiopianDate.formatEtDate(ethDate);
+console.log(formattedEthDate); // E.g., "Meskerem 1, 2015"
+```
+
+The `formatEtDate` function provides a straightforward way to format Ethiopian dates using the default format.
+
+**Note:** Using the hooks offers more flexibility and supports custom format strings, while `formatEtDate` uses a standard format.
+
 ## API Reference
 
 ### Components
@@ -93,6 +176,12 @@ export default App;
 #### DatePicker
 
 A component for selecting dates using Ethiopian or Gregorian calendars.
+
+##### Importing
+
+```tsx
+import { DatePicker } from "ethio-calendar-toolkit";
+```
 
 **Props**
 
@@ -131,6 +220,12 @@ A component for selecting dates using Ethiopian or Gregorian calendars.
 A component for selecting both dates and times, supporting Ethiopian and Gregorian calendars.
 
 The `DateTimePicker` extends the functionality of the `DatePicker` by including time selection. It provides options for both 12-hour and 24-hour time formats and allows customization through various props and class names.
+
+##### Importing
+
+```tsx
+import { DateTimePicker } from "ethio-calendar-toolkit";
+```
 
 **Props**
 
@@ -182,6 +277,48 @@ The `DateTimePicker` extends the functionality of the `DatePicker` by including 
 - `gregorianTabName?: string`  
   Custom label for the Gregorian calendar tab when both calendars are displayed.
 
+### EthiopianDate Namespace
+
+A collection of functions and types for Ethiopian date operations and conversions.
+
+#### Importing
+
+```tsx
+import { EthiopianDate } from "ethio-calendar-toolkit/lib";
+```
+
+#### Types
+
+- `EtDate`  
+  Represents an Ethiopian date.
+
+```ts
+interface EtDate {
+  Day: number;
+  Month: number;
+  Year: number;
+}
+```
+
+#### Functions
+
+- `toEth(gregorianDate: Date): EtDate`  
+  Converts a Gregorian date to an Ethiopian date.
+
+- `toGreg(ethDate: EtDate): Date`  
+  Converts an Ethiopian date to a Gregorian date.
+
+- `formatEtDate(date: EtDate, locale?: 'AMH' | 'EN'): string`  
+  Formats an Ethiopian date as a string.
+
+- `isLeapYearEt(year: number): boolean`  
+  Determines if an Ethiopian year is a leap year.
+
+- `ethiopianMonthLength(month: number, year: number): number`  
+  Returns the number of days in a given Ethiopian month.
+
+- Additional Utility Functions
+
 ### Hooks
 
 The toolkit provides several hooks for formatting dates and times.
@@ -217,3 +354,11 @@ Formats an Ethiopian date and time.
 ```ts
 const formattedEthiopianDateTime = useFormattedEthiopianDateTime(date: EthiopianDate, format?: string): string;
 ```
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or fixes.
+
+## License
+
+This project is licensed under the `MIT License.`
