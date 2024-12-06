@@ -1,6 +1,6 @@
 # Ethio Calendar Toolkit
 
-The Ethiopian Calendar Toolkit is a comprehensive React library that provides components, hooks, and utilities for working with both the Ethiopian and Gregorian calendars. It facilitates date selection, formatting, and conversion between these two calendars, making it easy to build applications that require dual calendar support.
+The Ethiopian Calendar Toolkit is a **feature-rich React library** that provides components, hooks, and utilities for working with both the Ethiopian and Gregorian calendars. It facilitates date selection, formatting, and conversion between these two calendars, making it easy to build applications that require dual calendar support. The components are fully customizable using **Tailwind CSS** or standard **CSS**, allowing you to tailor the look and feel to match your application's design.
 
 ## Features
 
@@ -257,7 +257,7 @@ import { DateTimePicker } from "ethio-calendar-toolkit";
 
   - `'12h'`: 12-hour format with AM/PM indicators.
   - `'24h'`: 24-hour format.
-  - **Default**: `'24h'`
+  - **Default**: `'12h'`
 
 - `dateTimePickerClassNames?: DateTimePickerClassNames`  
   Custom class names for styling various parts of the DateTimePicker component.
@@ -323,36 +323,161 @@ interface EtDate {
 
 The toolkit provides several hooks for formatting dates and times.
 
-#### useFormattedDate
+`useFormattedDate`
 
-Formats a Gregorian date.
+#### Importing
 
-```ts
-const formattedDate = useFormattedDate(date: Date, format?: string): string;
+```tsx
+import { useFormattedDate } from "ethio-calendar-toolkit/hooks";
 ```
 
-#### useFormattedEthiopianDate
+#### Usage
 
-Formats an Ethiopian date.
-
-```ts
-const formattedEthiopianDate = useFormattedEthiopianDate(date: EthiopianDate, format?: string): string;
+```tsx
+const formattedDate = useFormattedDate(date, format?, zone?);
 ```
 
-#### useFormattedDateTime
+- #### Parameters:
+  - `date: Date`  
+    The Gregorian date to format.
+  - `format?: string`  
+    Optional format string. Default is `'MMMM dd, yyyy'`.
+  - `zone?: string`  
+    Optional time zone. Default is `'default'`.
 
-Formats a Gregorian date and time.
+#### Example
 
-```ts
-const formattedDateTime = useFormattedDateTime(date: Date, format?: string): string;
+```tsx
+import { useFormattedDate } from "ethio-calendar-toolkit";
+
+const date = new Date();
+const formattedDate = useFormattedDate(
+  date,
+  "MMMM dd, yyyy",
+  "America/New_York"
+);
+console.log(formattedDate); // Outputs: "October 25, 2023"
 ```
 
-#### useFormattedEthiopianDateTime
+`useFormattedDateTime`
 
-Formats an Ethiopian date and time.
+Formats a **Gregorian date and time** according to a specified format string and time zone.
+
+#### Importing
+
+```tsx
+import { useFormattedDateTime } from "ethio-calendar-toolkit/hooks";
+```
+
+#### Usage
 
 ```ts
-const formattedEthiopianDateTime = useFormattedEthiopianDateTime(date: EthiopianDate, format?: string): string;
+const formattedDateTime = useFormattedDateTime(dateTime, format?, zone?);
+```
+
+- #### Parameters:
+  - `dateTime: Date`  
+    The Gregorian date to format.
+  - `format?: string`  
+    Optional format string. Default is `'MMMM dd, yyyy'`.
+  - `zone?: string`  
+    Optional time zone. Default is `'default'`.
+
+#### Example
+
+```tsx
+import { useFormattedDateTime } from "ethio-calendar-toolkit";
+
+const dateTime = new Date();
+const formattedDateTime = useFormattedDateTime(
+  dateTime,
+  "MMMM dd, yyyy HH:mm",
+  "America/New_York"
+);
+console.log(formattedDateTime); // Outputs: "October 25, 2023 14:30"
+```
+
+`useFormattedEthiopianDate`
+
+Formats an Ethiopian date according to a specified format string.
+
+#### Importing
+
+```tsx
+import { useFormattedEthiopianDate } from "ethio-calendar-toolkit/hooks";
+import { EthiopianDate } from "ethio-calendar-toolkit/lib";
+```
+
+#### Usage
+
+```tsx
+const formattedEthDate = useFormattedEthiopianDate(ethDate, format?);
+```
+
+- #### Parameters:
+  - `ethDate: EthiopianDate.EtDate`  
+    The Ethiopian date to format.
+  - `format?: string`  
+    Optional format string. Default is `'MMMM dd, yyyy'`.
+
+#### Example
+
+```tsx
+import { useFormattedEthiopianDate } from "ethio-calendar-toolkit/hooks";
+import { EthiopianDate } from "ethio-calendar-toolkit/lib";
+
+const ethDate: EthiopianDate.EtDate = {
+  Day: 1,
+  Month: 1,
+  Year: 2015,
+};
+
+const formattedEthDate = useFormattedEthiopianDate(ethDate, "MMMM dd, yyyy");
+console.log(formattedEthDate); // Outputs: "መስከረም 01, 2015"
+```
+
+`useFormattedEthiopianDateTime`
+
+Formats an **Ethiopian date and time** according to a specified format string.
+
+#### Importing
+
+```tsx
+import { useFormattedEthiopianDateTime } from "ethio-calendar-toolkit/hooks";
+import { EthiopianDate } from "ethio-calendar-toolkit/lib";
+```
+
+#### Usage
+
+```ts
+const formattedEthDateTime = useFormattedEthiopianDateTime(ethDateTime, format?);
+```
+
+- #### Parameters:
+  - `ethDateTime: EthiopianDate.EtDateTime`  
+    The Ethiopian date and time to format.
+  - `format?: string`  
+    Optional format string. Default is `'MMMM dd, yyyy HH:mm'`.
+
+#### Example
+
+```tsx
+import { useFormattedEthiopianDateTime } from "ethio-calendar-toolkit/hooks";
+import { EthiopianDate } from "ethio-calendar-toolkit/lib";
+
+const ethDateTime: EthiopianDate.EtDateTime = {
+  Day: 1,
+  Month: 1,
+  Year: 2015,
+  Hour: 14,
+  Minute: 30,
+};
+
+const formattedEthDateTime = useFormattedEthiopianDateTime(
+  ethDateTime,
+  "MMMM dd, yyyy HH:mm"
+);
+console.log(formattedEthDateTime); // Outputs: "መስከረም 01, 2015 14:30"
 ```
 
 ## Contributing
