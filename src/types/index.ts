@@ -2,7 +2,7 @@ import { EthiopianDate } from "../lib/ethiopian-date";
 
 interface DatePickerClassNames {
   container?: string;
-  popoverContent?: string;
+  popoverPanel?: string;
   triggerButton?: string;
   icon?: string;
   formattedDate?: string;
@@ -61,13 +61,10 @@ interface TimePickerClassNames {
 }
 
 interface PopoverProps {
-  side?: "top" | "right" | "bottom" | "left";
+  anchor?: Placement;
+  align?: Alignment;
   sideOffset?: number;
-  align?: "start" | "center" | "end";
   alignOffset?: number;
-  avoidCollisions?: boolean;
-  collisionBoundary?: Element | null;
-  collisionPadding?: number;
 }
 
 export interface DatePickerProps {
@@ -126,4 +123,19 @@ export interface GregorianDatePickerProps {
   selectedDate?: Date;
   onDateChange: (date: Date) => void;
   calanderClassNames?: CalendarClassNames;
+}
+
+export type Placement = "top" | "bottom" | "left" | "right";
+export type Alignment = "start" | "center" | "end";
+
+export interface Position {
+  x: number;
+  y: number;
+}
+
+export interface PositionConfig {
+  placement: Placement;
+  align: Alignment;
+  sideOffset: number;
+  alignOffset: number;
 }

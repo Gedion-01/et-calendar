@@ -1,17 +1,21 @@
-import * as Popover from "@radix-ui/react-popover";
-import * as Tabs from "@radix-ui/react-tabs";
-import React, { useEffect, useState } from "react";
+import "./DatePicker.css";
 import { EthiopianDatePicker } from "../EthiopiaDatePicker/EthiopianDatePicker";
 import { GregorianDatePicker } from "../GregorianDatePicker/GregorianDatePicker";
-import { CalendarIcon } from "@radix-ui/react-icons";
+import { Calendar } from "lucide-react";
 import { DatePickerProps } from "../../types";
 import { useFormattedEthiopianDate } from "../../hooks/useFormattedEthiopianDateTime";
 import { EthiopianDate } from "../../lib/ethiopian-date";
 import { useFormattedDate } from "../../hooks/useFormattedDate";
-import "./DatePicker.css";
 import { sanitizeDateFormat } from "../../utils/sanitizeDateFormat";
+import { PopoverButton } from "../Popover/PopoverButton";
+import { PopoverPanel } from "../Popover/PopoverPanel";
+import { Popover } from "../Popover/Popover";
+import { TabsRoot } from "../Tabs/TabsRoot";
+import { TabsList } from "../Tabs/TabsList";
+import { TabsTrigger } from "../Tabs/TabsTrigger";
+import { TabsContent } from "../Tabs/TabsContent";
 
-export const DatePicker: React.FC<DatePickerProps> = ({
+export function DatePicker({
   selectedDate,
   onDateChange,
   showCalendars,
@@ -19,21 +23,15 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   dateFormat = "MMMM dd, yyyy",
   datePickerClassNames = {},
   calanderClassNames = {},
-  popoverProps = {},
+  popoverProps = {
+    anchor: "bottom",
+    align: "center",
+    sideOffset: 8,
+    alignOffset: 0,
+  },
   ethiopianTabName = "Ethiopian",
   gregorianTabName = "Gregorian",
-}) => {
-  const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"ethiopian" | "gregorian">(
-    showCalendars === "gregorian" ? "gregorian" : "ethiopian"
-  );
-
-  useEffect(() => {
-    if (showCalendars === "both") {
-      setActiveTab(viewFirst === "Ethiopian" ? "ethiopian" : "gregorian");
-    }
-  }, [showCalendars, viewFirst]);
-
+}: DatePickerProps) {
   const sanitizedFormat = sanitizeDateFormat(dateFormat);
 
   const formattedDate =
@@ -52,69 +50,58 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         datePickerClassNames.container || ""
       }`}
     >
-      <Popover.Root open={open} onOpenChange={setOpen}>
-        <Popover.Trigger asChild>
-          <button
-            className={`trigger-button ${
-              datePickerClassNames.triggerButton || ""
+      <Popover>
+        <PopoverButton
+          className={`trigger-button ${
+            datePickerClassNames.triggerButton || ""
+          }`}
+        >
+          <Calendar className={`icon ${datePickerClassNames.icon || ""}`} />
+          <span
+            className={`formatted-date ${
+              datePickerClassNames.formattedDate || ""
+            } ${
+              !selectedDate
+                ? datePickerClassNames.placeholder || "placeholder"
+                : ""
             }`}
           >
-            <CalendarIcon
-              className={`icon ${datePickerClassNames.icon || ""}`}
-            />
-            <span
-              className={`formatted-date ${
-                datePickerClassNames.formattedDate || ""
-              } ${
-                !selectedDate
-                  ? datePickerClassNames.placeholder || "placeholder"
-                  : ""
-              }`}
-            >
-              {formattedDate}
-            </span>
-          </button>
-        </Popover.Trigger>
-        <Popover.Content
-          className={`popover-content ${
-            datePickerClassNames.popoverContent || ""
-          }`}
-          side={popoverProps.side || "bottom"}
-          sideOffset={popoverProps.sideOffset || 5}
-          align={popoverProps.align || "center"}
-          alignOffset={popoverProps.alignOffset || 0}
-          avoidCollisions={popoverProps.avoidCollisions || true}
-          collisionBoundary={popoverProps.collisionBoundary || undefined}
-          collisionPadding={popoverProps.collisionPadding || 10}
+            {formattedDate}
+          </span>
+        </PopoverButton>
+
+        <PopoverPanel
+          className={`${datePickerClassNames.popoverPanel || ""}`}
+          anchor={popoverProps.anchor}
+          align={popoverProps.align}
+          sideOffset={popoverProps.sideOffset}
+          alignOffset={popoverProps.alignOffset}
         >
           {showCalendars === "both" ? (
-            <Tabs.Root
-              value={activeTab}
-              onValueChange={(value) =>
-                setActiveTab(value as "ethiopian" | "gregorian")
+            <TabsRoot
+              initialActiveTab={
+                viewFirst === "Ethiopian" ? "ethiopian" : "gregorian"
               }
             >
-              <Tabs.List
-                className={`tabs-list ${datePickerClassNames.tabsList || ""}`}
-              >
-                <Tabs.Trigger
+              <TabsList className={datePickerClassNames.tabsList || ""}>
+                <TabsTrigger
                   value="ethiopian"
                   className={`tabs-trigger ${
                     datePickerClassNames.tabsTrigger || ""
-                  } ${activeTab === "ethiopian" ? "active" : ""}`}
+                  }`}
                 >
                   {ethiopianTabName}
-                </Tabs.Trigger>
-                <Tabs.Trigger
+                </TabsTrigger>
+                <TabsTrigger
                   value="gregorian"
                   className={`tabs-trigger ${
                     datePickerClassNames.tabsTrigger || ""
-                  } ${activeTab === "gregorian" ? "active" : ""}`}
+                  }`}
                 >
                   {gregorianTabName}
-                </Tabs.Trigger>
-              </Tabs.List>
-              <Tabs.Content
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent
                 value="ethiopian"
                 className={`tabs-content ${
                   datePickerClassNames.tabsContent || ""
@@ -125,8 +112,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                   onDateChange={onDateChange}
                   calanderClassNames={calanderClassNames}
                 />
-              </Tabs.Content>
-              <Tabs.Content
+              </TabsContent>
+              <TabsContent
                 value="gregorian"
                 className={`tabs-content ${
                   datePickerClassNames.tabsContent || ""
@@ -137,23 +124,21 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                   onDateChange={onDateChange}
                   calanderClassNames={calanderClassNames}
                 />
-              </Tabs.Content>
-            </Tabs.Root>
+              </TabsContent>
+            </TabsRoot>
           ) : showCalendars === "ethiopian" ? (
             <EthiopianDatePicker
               selectedDate={selectedDate}
               onDateChange={onDateChange}
-              calanderClassNames={calanderClassNames}
             />
           ) : (
             <GregorianDatePicker
               selectedDate={selectedDate}
               onDateChange={onDateChange}
-              calanderClassNames={calanderClassNames}
             />
           )}
-        </Popover.Content>
-      </Popover.Root>
+        </PopoverPanel>
+      </Popover>
     </div>
   );
-};
+}

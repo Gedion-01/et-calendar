@@ -1,16 +1,23 @@
-import React, { useState, useRef, useEffect } from "react";
-import * as Popover from "@radix-ui/react-popover";
-import { Clock } from "lucide-react";
-import * as Switch from "@radix-ui/react-switch";
-import { TimeFormat, TimePickerProps } from "../../types/index";
 import "./TimePicker.css";
+import React, { useState, useRef, useEffect } from "react";
+import { Clock } from "lucide-react";
+import { TimeFormat, TimePickerProps } from "../../types/index";
+import { Popover } from "../Popover/Popover";
+import { PopoverButton } from "../Popover/PopoverButton";
+import { PopoverPanel } from "../Popover/PopoverPanel";
+import { Switch } from "../Switch/Switch";
 
 export default function TimePicker({
   selectedTime,
   onTimeChange,
   timeFormat: initialTimeFormat = "12h",
   timePickerClassNames = {},
-  popoverProps = {},
+  popoverProps = {
+    anchor: "bottom",
+    align: "center",
+    sideOffset: 8,
+    alignOffset: 0,
+  },
 }: TimePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [localSelectedTime, setLocalSelectedTime] = useState(
@@ -196,72 +203,159 @@ export default function TimePicker({
   };
 
   return (
-    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Popover.Trigger asChild>
-        <button
-          className={`trigger-button ${
-            timePickerClassNames.triggerButton || ""
+    <Popover>
+      <PopoverButton
+        className={`trigger-button ${timePickerClassNames.triggerButton || ""}`}
+      >
+        <Clock className={`icon ${timePickerClassNames.icon || ""}`} />
+        <span
+          className={`time-display ${timePickerClassNames.timeDisplay || ""} ${
+            !selectedTime ? "placeholder" : ""
           }`}
         >
-          <Clock className={`icon ${timePickerClassNames.icon || ""}`} />
-          <span
-            className={`time-display ${
-              timePickerClassNames.timeDisplay || ""
-            } ${!selectedTime ? "placeholder" : ""}`}
+          {formatTime(localSelectedTime)}
+        </span>
+      </PopoverButton>
+      <PopoverPanel
+        className={`${timePickerClassNames.popoverContent || ""}`}
+        anchor={popoverProps.anchor}
+        align={popoverProps.align}
+        sideOffset={popoverProps.sideOffset}
+        alignOffset={popoverProps.alignOffset}
+      >
+        <div className={`header ${timePickerClassNames.header || ""}`}>
+          <h3 className={`heading ${timePickerClassNames.heading || ""}`}>
+            Select Time
+          </h3>
+          <div
+            className={`time-format-toggle ${
+              timePickerClassNames.timeFormatToggle || ""
+            }`}
           >
-            {formatTime(localSelectedTime)}
-          </span>
-        </button>
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Content
-          className={`popover-content ${
-            timePickerClassNames.popoverContent || ""
-          }`}
-          side={popoverProps.side || "bottom"}
-          sideOffset={popoverProps.sideOffset || 5}
-          align={popoverProps.align || "center"}
-          alignOffset={popoverProps.alignOffset || 0}
-          avoidCollisions={popoverProps.avoidCollisions || true}
-          collisionBoundary={popoverProps.collisionBoundary || undefined}
-          collisionPadding={popoverProps.collisionPadding || 10}
-        >
-          <div className={`header ${timePickerClassNames.header || ""}`}>
-            <h3 className={`heading ${timePickerClassNames.heading || ""}`}>
-              Select Time
-            </h3>
-            <div
-              className={`time-format-toggle ${
-                timePickerClassNames.timeFormatToggle || ""
+            <span
+              className={`time-format-label ${
+                timePickerClassNames.timeFormatLabel || ""
               }`}
             >
-              <span
-                className={`time-format-label ${
-                  timePickerClassNames.timeFormatLabel || ""
+              24h
+            </span>
+            <Switch
+              checked={timeFormat === "24h"}
+              onChange={toggleTimeFormat}
+              className={`switch-roo${timePickerClassNames.switchRoot || ""}`}
+            />
+          </div>
+        </div>
+        <div
+          className={`time-sections ${timePickerClassNames.timeSections || ""}`}
+        >
+          <div
+            className={`time-section ${timePickerClassNames.timeSection || ""}`}
+          >
+            <div
+              className={`time-section-title ${
+                timePickerClassNames.timeSectionTitle || ""
+              }`}
+            >
+              Hour
+            </div>
+            <div
+              className={`timeSectionWrapper ${
+                timePickerClassNames.timeSectionWrapper || ""
+              }`}
+            >
+              <div
+                className={`dividerWrapper ${
+                  timePickerClassNames.dividerWrapper || ""
                 }`}
               >
-                24h
-              </span>
-              <Switch.Root
-                checked={timeFormat === "24h"}
-                onCheckedChange={toggleTimeFormat}
-                className={`switch-root ${
-                  timePickerClassNames.switchRoot || ""
-                }`}
+                <div
+                  className={`divider ${timePickerClassNames.divider || ""}`}
+                ></div>
+              </div>
+              <div
+                ref={hourRef}
+                className={`time-list ${timePickerClassNames.timeList || ""}`}
               >
-                <Switch.Thumb
-                  className={`switch-thumb ${
-                    timePickerClassNames.switchThumb || ""
-                  }`}
-                />
-              </Switch.Root>
+                <div
+                  className={`spacer ${timePickerClassNames.spacer || ""}`}
+                ></div>
+                {hours.map((hour) => (
+                  <div
+                    key={hour}
+                    className={`time-item ${
+                      timePickerClassNames.timeItem || ""
+                    } ${
+                      convertHourToCurrentFormat(
+                        localSelectedTime.split(":")[0]
+                      ) === hour
+                        ? `${timePickerClassNames.activeTimeItem || "active"}`
+                        : ""
+                    }`}
+                    onClick={() => handleTimeClick("hour", hour)}
+                    data-value={hour}
+                  >
+                    {hour}
+                  </div>
+                ))}
+                <div
+                  className={`spacer ${timePickerClassNames.spacer || ""}`}
+                ></div>
+              </div>
             </div>
           </div>
           <div
-            className={`time-sections ${
-              timePickerClassNames.timeSections || ""
-            }`}
+            className={`time-section ${timePickerClassNames.timeSection || ""}`}
           >
+            <div
+              className={`time-section-title ${timePickerClassNames.timeSectionTitle}`}
+            >
+              Minute
+            </div>
+            <div
+              className={`timeSectionWrapper ${
+                timePickerClassNames.timeSectionWrapper || ""
+              }`}
+            >
+              <div
+                className={`dividerWrapper ${
+                  timePickerClassNames.dividerWrapper || ""
+                }`}
+              >
+                <div
+                  className={`divider ${timePickerClassNames.divider || ""}`}
+                ></div>
+              </div>
+              <div
+                ref={minuteRef}
+                className={`time-list ${timePickerClassNames.timeList || ""}`}
+              >
+                <div
+                  className={`spacer ${timePickerClassNames.spacer || ""}`}
+                ></div>
+                {minutes.map((minute) => (
+                  <div
+                    key={minute}
+                    className={`time-item ${
+                      timePickerClassNames.timeItem || ""
+                    } ${
+                      localSelectedTime.split(":")[1].split(" ")[0] === minute
+                        ? `${timePickerClassNames.activeTimeItem || "active"}`
+                        : ""
+                    }`}
+                    onClick={() => handleTimeClick("minute", minute)}
+                    data-value={minute}
+                  >
+                    {minute}
+                  </div>
+                ))}
+                <div
+                  className={`spacer ${timePickerClassNames.spacer || ""}`}
+                ></div>
+              </div>
+            </div>
+          </div>
+          {timeFormat === "12h" && (
             <div
               className={`time-section ${
                 timePickerClassNames.timeSection || ""
@@ -272,151 +366,39 @@ export default function TimePicker({
                   timePickerClassNames.timeSectionTitle || ""
                 }`}
               >
-                Hour
+                AM/PM
               </div>
               <div
-                className={`timeSectionWrapper ${
-                  timePickerClassNames.timeSectionWrapper || ""
+                className={`am-pm-buttons ${
+                  timePickerClassNames.amPmButtons || ""
                 }`}
               >
-                <div
-                  className={`dividerWrapper ${
-                    timePickerClassNames.dividerWrapper || ""
-                  }`}
-                >
-                  <div
-                    className={`divider ${timePickerClassNames.divider || ""}`}
-                  ></div>
-                </div>
-                <div
-                  ref={hourRef}
-                  className={`time-list ${timePickerClassNames.timeList || ""}`}
-                >
-                  <div
-                    className={`spacer ${timePickerClassNames.spacer || ""}`}
-                  ></div>
-                  {hours.map((hour) => (
-                    <div
-                      key={hour}
-                      className={`time-item ${
-                        timePickerClassNames.timeItem || ""
-                      } ${
-                        convertHourToCurrentFormat(
-                          localSelectedTime.split(":")[0]
-                        ) === hour
-                          ? `${timePickerClassNames.activeTimeItem || "active"}`
-                          : ""
-                      }`}
-                      onClick={() => handleTimeClick("hour", hour)}
-                      data-value={hour}
-                    >
-                      {hour}
-                    </div>
-                  ))}
-                  <div
-                    className={`spacer ${timePickerClassNames.spacer || ""}`}
-                  ></div>
-                </div>
+                {["AM", "PM"].map((period) => (
+                  <button
+                    key={period}
+                    className={`am-pm-button ${
+                      timePickerClassNames.amPmButton || ""
+                    } ${
+                      (localSelectedTime.split(" ")[1] ||
+                        (parseInt(localSelectedTime.split(":")[0], 10) >= 12
+                          ? "PM"
+                          : "AM")) === period
+                        ? `${
+                            timePickerClassNames.activeAmPmButton ||
+                            "active-am-pm-button"
+                          }`
+                        : ""
+                    }`}
+                    onClick={() => handlePeriodClick(period as "AM" | "PM")}
+                  >
+                    {period}
+                  </button>
+                ))}
               </div>
             </div>
-            <div
-              className={`time-section ${
-                timePickerClassNames.timeSection || ""
-              }`}
-            >
-              <div
-                className={`time-section-title ${timePickerClassNames.timeSectionTitle}`}
-              >
-                Minute
-              </div>
-              <div
-                className={`timeSectionWrapper ${
-                  timePickerClassNames.timeSectionWrapper || ""
-                }`}
-              >
-                <div
-                  className={`dividerWrapper ${
-                    timePickerClassNames.dividerWrapper || ""
-                  }`}
-                >
-                  <div
-                    className={`divider ${timePickerClassNames.divider || ""}`}
-                  ></div>
-                </div>
-                <div
-                  ref={minuteRef}
-                  className={`time-list ${timePickerClassNames.timeList || ""}`}
-                >
-                  <div
-                    className={`spacer ${timePickerClassNames.spacer || ""}`}
-                  ></div>
-                  {minutes.map((minute) => (
-                    <div
-                      key={minute}
-                      className={`time-item ${
-                        timePickerClassNames.timeItem || ""
-                      } ${
-                        localSelectedTime.split(":")[1].split(" ")[0] === minute
-                          ? `${timePickerClassNames.activeTimeItem || "active"}`
-                          : ""
-                      }`}
-                      onClick={() => handleTimeClick("minute", minute)}
-                      data-value={minute}
-                    >
-                      {minute}
-                    </div>
-                  ))}
-                  <div
-                    className={`spacer ${timePickerClassNames.spacer || ""}`}
-                  ></div>
-                </div>
-              </div>
-            </div>
-            {timeFormat === "12h" && (
-              <div
-                className={`time-section ${
-                  timePickerClassNames.timeSection || ""
-                }`}
-              >
-                <div
-                  className={`time-section-title ${
-                    timePickerClassNames.timeSectionTitle || ""
-                  }`}
-                >
-                  AM/PM
-                </div>
-                <div
-                  className={`am-pm-buttons ${
-                    timePickerClassNames.amPmButtons || ""
-                  }`}
-                >
-                  {["AM", "PM"].map((period) => (
-                    <button
-                      key={period}
-                      className={`am-pm-button ${
-                        timePickerClassNames.amPmButton || ""
-                      } ${
-                        (localSelectedTime.split(" ")[1] ||
-                          (parseInt(localSelectedTime.split(":")[0], 10) >= 12
-                            ? "PM"
-                            : "AM")) === period
-                          ? `${
-                              timePickerClassNames.activeAmPmButton ||
-                              "active-am-pm-button"
-                            }`
-                          : ""
-                      }`}
-                      onClick={() => handlePeriodClick(period as "AM" | "PM")}
-                    >
-                      {period}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </Popover.Content>
-      </Popover.Portal>
-    </Popover.Root>
+          )}
+        </div>
+      </PopoverPanel>
+    </Popover>
   );
 }
