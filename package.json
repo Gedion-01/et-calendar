@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "ethio-calendar-toolkit",
+  "name": "eth-calendar-toolkit",
   "version": "0.0.1",
   "description": "A React calendar toolkit for Ethiopian and Gregorian dates",
   "main": "dist/index.js",
