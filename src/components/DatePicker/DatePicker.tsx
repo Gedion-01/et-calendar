@@ -26,7 +26,7 @@ export function DatePicker({
   popoverProps = {
     anchor: "bottom",
     align: "center",
-    sideOffset: 8,
+    sideOffset: 10,
     alignOffset: 0,
   },
   ethiopianTabName = "Ethiopian",

@@ -9,8 +9,6 @@ export interface PopoverButtonProps {
 export function PopoverButton({ children, className }: PopoverButtonProps) {
   const { isOpen, setIsOpen, triggerRef } = usePopoverContext();
 
-  console.log(className);
-
   return (
     <button
       ref={triggerRef}

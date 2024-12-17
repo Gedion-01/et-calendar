@@ -15,11 +15,10 @@ export default function TimePicker({
   popoverProps = {
     anchor: "bottom",
     align: "center",
-    sideOffset: 8,
+    sideOffset: 10,
     alignOffset: 0,
   },
 }: TimePickerProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const [localSelectedTime, setLocalSelectedTime] = useState(
     selectedTime || "12:00 AM"
   );
@@ -45,14 +44,6 @@ export default function TimePicker({
   useEffect(() => {
     setTimeFormat(initialTimeFormat);
   }, [initialTimeFormat]);
-
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => {
-        centerSelectedTime();
-      }, 0);
-    }
-  }, [isOpen, localSelectedTime, timeFormat]);
 
   const centerSelectedTime = () => {
     const [hour, minute] = localSelectedTime.split(":");
@@ -202,8 +193,17 @@ export default function TimePicker({
     }
   };
 
+  // Handle popover open state to center selected time
+  const handleOpenChange = (open: boolean) => {
+    if (open) {
+      setTimeout(() => {
+        centerSelectedTime();
+      }, 0);
+    }
+  };
+
   return (
-    <Popover>
+    <Popover onOpenChange={handleOpenChange}>
       <PopoverButton
         className={`trigger-button ${timePickerClassNames.triggerButton || ""}`}
       >
