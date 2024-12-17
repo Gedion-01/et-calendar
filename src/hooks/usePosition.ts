@@ -32,7 +32,6 @@ export function usePosition(
     setPosition(newPosition);
     setActualPlacement(newPlacement);
     setIsPositioned(true);
-    console.log("Position updated:", newPosition);
   }, [
     anchor,
     align,
