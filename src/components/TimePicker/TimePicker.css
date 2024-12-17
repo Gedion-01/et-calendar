@@ -41,6 +41,7 @@
 .time-display {
   font-size: medium;
   color: var(--text-color);
+  white-space: nowrap;
 }
 
 .time-display.placeholder {

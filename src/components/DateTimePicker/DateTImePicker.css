@@ -18,6 +18,7 @@
 /* Container */
 .date-time-picker-container {
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
   gap: 0.5rem;
   border-radius: 0.375rem;
@@ -46,6 +47,7 @@
 .formatted-date {
   font-size: medium;
   color: var(--text-color);
+  white-space: nowrap;
 }
 
 .formatted-date.placeholder {
