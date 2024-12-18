@@ -1,15 +1,16 @@
 {
   "type": "module",
   "name": "eth-calendar",
-  "version": "0.0.1",
-  "description": "A React calendar toolkit for Ethiopian and Gregorian dates",
+  "version": "0.0.1-alpha.0",
+  "description": "The Eth-Calendar is a feature-rich React library that provides components, hooks, and utilities for working with both the Ethiopian and Gregorian calendars. It facilitates date selection, formatting, and conversion between these two calendars, making it easy to build applications that require dual calendar support.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "rollup": "rollup -c --bundleConfigAsCjs",
+    "build": "rollup -c --bundleConfigAsCjs",
     "test": "jest",
-    "watch:dev": "rollup -c -w --bundleConfigAsCjs"
+    "watch:dev": "rollup -c -w --bundleConfigAsCjs",
+    "semantic-release": "semantic-release"
   },
   "keywords": [
     "eth-calendar",
@@ -21,12 +22,14 @@
     "ethiopian calendar",
     "gregorian calendar"
   ],
-  "author": "",
+  "author": {
+    "name": "Gedion W"
+  },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Gedion-01/ethio-calendar-toolkit/issues"
+    "url": "https://github.com/Gedion-01/eth-calendar/issues"
   },
-  "homepage": "https://github.com/Gedion-01/ethio-calendar-toolkit#readme",
+  "homepage": "https://github.com/Gedion-01/eth-calendar#readme",
   "dependencies": {
     "lucide-react": "^0.344.0",
     "luxon": "^3.5.0"
@@ -50,6 +53,7 @@
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
+    "semantic-release": "^24.2.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
@@ -62,8 +66,12 @@
   "files": [
     "dist",
     "dist/hooks",
-    "dist/lib"
+    "dist/lib",
+    "README.md"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.mjs",

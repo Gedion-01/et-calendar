@@ -207,7 +207,7 @@ import { DatePicker } from "eth-calendar";
   Custom class names for styling the calendar.
 
 - `popoverProps?: PopoverProps`  
-  Props to customize the popover behavior and appearance.
+  Props to customize the popover behavior.
 
 - `ethiopianTabName?: string`  
   Custom label for the Ethiopian calendar tab when both calendars are displayed.
@@ -269,7 +269,7 @@ import { DateTimePicker } from "eth-calendar";
   Custom class names for styling the time picker component.
 
 - `popoverProps?: PopoverProps`  
-  Props for customizing the behavior and appearance of the popover that contains the picker.
+  Props for customizing the behavior contains the picker.
 
 - `ethiopianTabName?: string`  
   Custom label for the Ethiopian calendar tab when both calendars are displayed.
