@@ -1,6 +1,6 @@
-# Eth-Calendar
+# Et-Calendar
 
-The Eth-Calendar is a **feature-rich React library** that provides components, hooks, and utilities for working with both the Ethiopian and Gregorian calendars. It facilitates date selection, formatting, and conversion between these two calendars, making it easy to build applications that require dual calendar support. The components are fully customizable using **Tailwind CSS** or standard **CSS**, allowing you to tailor the look and feel to match your application's design.
+The Et-Calendar is a **feature-rich React library** that provides components, hooks, and utilities for working with both the Ethiopian and Gregorian calendars. It facilitates date selection, formatting, and conversion between these two calendars, making it easy to build applications that require dual calendar support. The components are fully customizable using **Tailwind CSS** or standard **CSS**, allowing you to tailor the look and feel to match your application's design.
 
 ## Features
 
@@ -15,7 +15,7 @@ The Eth-Calendar is a **feature-rich React library** that provides components, h
 Install the package via npm:
 
 ```bash
-npm install eth-calendar
+npm install et-calendar
 ```
 
 ## Usage
@@ -26,8 +26,8 @@ The DatePicker component allows users to select dates using either the Ethiopian
 
 ```tsx
 import React, { useState } from "react";
-import { EthiopianDate } from "eth-calendar/lib";
-import { DatePicker } from "eth-calendar";
+import { EthiopianDate } from "et-calendar/lib";
+import { DatePicker } from "et-calendar";
 
 const App = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -58,7 +58,7 @@ The DateTimePicker component extends the DatePicker by including time selection.
 
 ```tsx
 import React, { useState } from "react";
-import { DateTimePicker } from "eth-calendar";
+import { DateTimePicker } from "et-calendar";
 
 const App = () => {
   const [dateTime, setDateTime] = useState<Date | undefined>();
@@ -91,13 +91,13 @@ export default App;
 The EthiopianDate namespace provides functions for converting between Ethiopian and Gregorian dates and performing date calculations.
 
 ```tsx
-import { EthiopianDate } from "eth-calendar/lib";
+import { EthiopianDate } from "et-calendar/lib";
 ```
 
 #### Converting Gregorian Date to Ethiopian Date
 
 ```ts
-import { EthiopianDate } from "eth-calendar/lib";
+import { EthiopianDate } from "et-calendar/lib";
 
 const currentGregorianDate = new Date();
 const ethDate = EthiopianDate.toEth(currentGregorianDate);
@@ -107,7 +107,7 @@ console.log(ethDate); // Outputs the Ethiopian date object
 #### Converting Ethiopian Date to Gregorian Date
 
 ```ts
-import { EthiopianDate } from "eth-calendar/lib";
+import { EthiopianDate } from "et-calendar/lib";
 
 const ethDate: EthiopianDate.EtDate = {
   Day: 1,
@@ -135,8 +135,8 @@ The toolkit offers hooks that simplify the formatting of Ethiopian dates and dat
 Formats an Ethiopian date according to a specified format string.
 
 ```ts
-import { useFormattedEthiopianDate } from "eth-calendar";
-import { EthiopianDate } from "eth-calendar/lib";
+import { useFormattedEthiopianDate } from "et-calendar";
+import { EthiopianDate } from "et-calendar/lib";
 
 const ethDate: EthiopianDate.EtDate = {
   Day: 1,
@@ -153,7 +153,7 @@ console.log(formattedEthDate); // Outputs: "መስከረም 01, 2015"
 Alternatively, you can use the formatEtDate function provided in the EthiopianDate namespace for formatting.
 
 ```ts
-import { EthiopianDate } from "eth-calendar/lib";
+import { EthiopianDate } from "et-calendar/lib";
 
 const ethDate: EthiopianDate.EtDate = {
   Day: 1,
@@ -180,7 +180,7 @@ A component for selecting dates using Ethiopian or Gregorian calendars.
 ##### Importing
 
 ```tsx
-import { DatePicker } from "eth-calendar";
+import { DatePicker } from "et-calendar";
 ```
 
 **Props**
@@ -224,7 +224,7 @@ The `DateTimePicker` extends the functionality of the `DatePicker` by including 
 ##### Importing
 
 ```tsx
-import { DateTimePicker } from "eth-calendar";
+import { DateTimePicker } from "et-calendar";
 ```
 
 **Props**
@@ -284,7 +284,7 @@ A collection of functions and types for Ethiopian date operations and conversion
 #### Importing
 
 ```tsx
-import { EthiopianDate } from "eth-calendar/lib";
+import { EthiopianDate } from "et-calendar/lib";
 ```
 
 #### Types
@@ -328,7 +328,7 @@ The toolkit provides several hooks for formatting dates and times.
 #### Importing
 
 ```tsx
-import { useFormattedDate } from "eth-calendar/hooks";
+import { useFormattedDate } from "et-calendar/hooks";
 ```
 
 #### Usage
@@ -348,7 +348,7 @@ const formattedDate = useFormattedDate(date, format?, zone?);
 #### Example
 
 ```tsx
-import { useFormattedDate } from "eth-calendar/hooks";
+import { useFormattedDate } from "et-calendar/hooks";
 
 const date = new Date();
 const formattedDate = useFormattedDate(
@@ -366,7 +366,7 @@ Formats a **Gregorian date and time** according to a specified format string and
 #### Importing
 
 ```tsx
-import { useFormattedDateTime } from "eth-calendar/hooks";
+import { useFormattedDateTime } from "et-calendar/hooks";
 ```
 
 #### Usage
@@ -386,7 +386,7 @@ const formattedDateTime = useFormattedDateTime(dateTime, format?, zone?);
 #### Example
 
 ```tsx
-import { useFormattedDateTime } from "eth-calendar/hooks";
+import { useFormattedDateTime } from "et-calendar/hooks";
 
 const dateTime = new Date();
 const formattedDateTime = useFormattedDateTime(
@@ -404,8 +404,8 @@ Formats an Ethiopian date according to a specified format string.
 #### Importing
 
 ```tsx
-import { useFormattedEthiopianDate } from "eth-calendar/hooks";
-import { EthiopianDate } from "eth-calendar/lib";
+import { useFormattedEthiopianDate } from "et-calendar/hooks";
+import { EthiopianDate } from "et-calendar/lib";
 ```
 
 #### Usage
@@ -423,8 +423,8 @@ const formattedEthDate = useFormattedEthiopianDate(ethDate, format?);
 #### Example
 
 ```tsx
-import { useFormattedEthiopianDate } from "eth-calendar/hooks";
-import { EthiopianDate } from "eth-calendar/lib";
+import { useFormattedEthiopianDate } from "et-calendar/hooks";
+import { EthiopianDate } from "et-calendar/lib";
 
 const ethDate: EthiopianDate.EtDate = {
   Day: 1,
@@ -443,8 +443,8 @@ Formats an **Ethiopian date and time** according to a specified format string.
 #### Importing
 
 ```tsx
-import { useFormattedEthiopianDateTime } from "eth-calendar/hooks";
-import { EthiopianDate } from "eth-calendar/lib";
+import { useFormattedEthiopianDateTime } from "et-calendar/hooks";
+import { EthiopianDate } from "et-calendar/lib";
 ```
 
 #### Usage
@@ -462,8 +462,8 @@ const formattedEthDateTime = useFormattedEthiopianDateTime(ethDateTime, format?)
 #### Example
 
 ```tsx
-import { useFormattedEthiopianDateTime } from "eth-calendar/hooks";
-import { EthiopianDate } from "eth-calendar/lib";
+import { useFormattedEthiopianDateTime } from "et-calendar/hooks";
+import { EthiopianDate } from "et-calendar/lib";
 
 const ethDateTime: EtDateTime = {
   Day: 1,
