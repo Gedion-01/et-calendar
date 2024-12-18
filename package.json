@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "eth-calendar-toolkit",
+  "name": "eth-calendar",
   "version": "0.0.1",
   "description": "A React calendar toolkit for Ethiopian and Gregorian dates",
   "main": "dist/index.js",
@@ -12,6 +12,7 @@
     "watch:dev": "rollup -c -w --bundleConfigAsCjs"
   },
   "keywords": [
+    "eth-calendar",
     "react",
     "react-component",
     "datepicker",
