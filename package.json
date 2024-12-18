@@ -65,8 +65,6 @@
   },
   "files": [
     "dist",
-    "dist/hooks",
-    "dist/lib",
     "README.md"
   ],
   "publishConfig": {
