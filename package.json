@@ -1,7 +1,7 @@
 {
   "type": "module",
-  "name": "eth-calendar",
-  "version": "0.0.1-alpha.0",
+  "name": "et-calendar",
+  "version": "0.0.1",
   "description": "The Eth-Calendar is a feature-rich React library that provides components, hooks, and utilities for working with both the Ethiopian and Gregorian calendars. It facilitates date selection, formatting, and conversion between these two calendars, making it easy to build applications that require dual calendar support.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -13,7 +13,7 @@
     "semantic-release": "semantic-release"
   },
   "keywords": [
-    "eth-calendar",
+    "et-calendar",
     "react",
     "react-component",
     "datepicker",
