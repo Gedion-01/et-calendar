@@ -4,33 +4,27 @@ on:
   push:
     branches:
       - main
-      - beta
-  pull_request:
-    branches:
-      - main
-      - beta
+      - next
 
-jobs:
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+
+ jobs:
   release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
+          node-version: 'lts/*'
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build project
-        run: npm run build
-
-      - name: Run npm audit
-        run: npm audit
+      - run: npm ci
+      - run: npm run build
+      - run: npm audit signature
 
       - name: Release
         env:
