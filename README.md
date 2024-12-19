@@ -2,6 +2,10 @@
 
 The Et-Calendar is a **feature-rich React library** that provides components, hooks, and utilities for working with both the Ethiopian and Gregorian calendars. It facilitates date selection, formatting, and conversion between these two calendars, making it easy to build applications that require dual calendar support. The components are fully customizable using **Tailwind CSS** or standard **CSS**, allowing you to tailor the look and feel to match your application's design.
 
+<img src="https://res.cloudinary.com/dcrldqkrc/image/upload/v1734594570/288c2edf-4bb9-49f0-a22d-63d607289fd7.png" alt="drawing" width="230"/>
+<img src="https://res.cloudinary.com/dcrldqkrc/image/upload/v1734595160/0b1a87dc-41c3-4271-b5e0-18d27ebad931.png" alt="drawing" width="230"/>
+<img src="https://res.cloudinary.com/dcrldqkrc/image/upload/v1734595307/3b7fb9c8-aa16-4ea3-b6f8-057a9dc9b264.png" alt="drawing" width="230" height="296"/>
+
 ## Features
 
 - **DatePicker Component**: A customizable date picker supporting Ethiopian and Gregorian calendars.
@@ -148,7 +152,7 @@ const formattedEthDate = useFormattedEthiopianDate(ethDate, "MMMM dd, yyyy");
 console.log(formattedEthDate); // Outputs: "መስከረም 01, 2015"
 ```
 
-##### Using formatEtDate Function from the Library
+##### `Using formatEtDate Function from the Library`
 
 Alternatively, you can use the formatEtDate function provided in the EthiopianDate namespace for formatting.
 
