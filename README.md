@@ -24,6 +24,12 @@ Install the package via npm:
 npm install et-calendar
 ```
 
+Or via Yarn:
+
+```bash
+yarn add et-calendar
+```
+
 ## Usage
 
 ### DatePicker
@@ -488,6 +494,10 @@ console.log(formattedEthDateTime); // Outputs: "መስከረም 01, 2015 14:30"
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or fixes.
+
+## Future Plans
+
+plan to add date range pickers in future releases. Stay tuned for updates!
 
 ## License
 
