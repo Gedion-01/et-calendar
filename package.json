@@ -26,6 +26,13 @@
     "name": "Gedion W"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gedion-01/et-calendar.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "bugs": {
     "url": "https://github.com/Gedion-01/eth-calendar/issues"
   },
@@ -73,9 +80,6 @@
     "dist",
     "README.md"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
