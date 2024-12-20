@@ -1,6 +1,6 @@
 # Et-Calendar
 
-The Et-Calendar is a **feature-rich React library** that provides components, hooks, and utilities for working with both the Ethiopian and Gregorian calendars. It facilitates date selection, formatting, and conversion between these two calendars, making it easy to build applications that require dual calendar support. The components are fully customizable using **Tailwind CSS** or standard **CSS**, allowing you to tailor the look and feel to match your application's design.
+The Et-Calendar is a **feature-rich React library** that provides components, hooks, and utilities for working with both the Ethiopian and Gregorian calendars. It facilitates date selection, formatting, and conversion between these two calendars, making it easy to build applications that require dual calendar support. The components are fully customizable using **Tailwind CSS** or standard **CSS**, allowing you to tailor the look and feel to match your application's design. <a href="https://et-calendar-demo.netlify.app/" target="_blank">Demo</a>
 
 <p align="center">
   <img src="https://res.cloudinary.com/dcrldqkrc/image/upload/v1734594570/288c2edf-4bb9-49f0-a22d-63d607289fd7.png" alt="Image 1" width="230"/>
