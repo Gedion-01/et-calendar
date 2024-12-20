@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "et-calendar",
-  "version": "0.0.2",
+  "version": "1.1.0",
   "description": "A feature-rich React library that provides components, hooks, and utilities for working with both the Ethiopian and Gregorian calendars. It facilitates date selection, formatting, and conversion between these two calendars, making it easy to build applications that require dual calendar support.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
