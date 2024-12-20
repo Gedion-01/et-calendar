@@ -36,8 +36,8 @@ import { EthiopianDate } from "et-calendar/lib";
 import { DatePicker } from "et-calendar";
 
 const App = () => {
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [ethDate, setEthDate] = useState(EthiopianDate.toEth(new Date()));
+  const [date, setDate] = useState<Date>(() => new Date());
+  const [ethDate, setEthDate] = useState(() => EthiopianDate.toEth(new Date()));
 
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
@@ -67,10 +67,8 @@ import React, { useState } from "react";
 import { DateTimePicker } from "et-calendar";
 
 const App = () => {
-  const [dateTime, setDateTime] = useState<Date | undefined>();
-  const [ethioDateTime, setEthioDateTime] = useState(
-    EthiopianDate.toEth(new Date())
-  );
+  const [date, setDate] = useState<Date>(() => new Date());
+  const [ethDate, setEthDate] = useState(() => EthiopianDate.toEth(new Date()));
 
   const handleDateTimeChange = (newDate: Date) => {
     setDateTime(newDate);
