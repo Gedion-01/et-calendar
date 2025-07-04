@@ -177,6 +177,7 @@ export function Calendar({
       days.push(
         <div key={i} className={`day-cell ${calendarClassNames.dayCell || ""}`}>
           <button
+            type="button"
             ref={isSelected ? selectedDateRef : null}
             onClick={() => {
               if (isEthiopian) {
@@ -237,6 +238,7 @@ export function Calendar({
   const renderMonthView = () => (
     <div className={`month-view ${calendarClassNames.monthView || ""}`}>
       <button
+        type="button"
         onClick={() => setCurrentView("year")}
         className={`year-display-button ${calendarClassNames.yearButton || ""}`}
       >
@@ -247,6 +249,7 @@ export function Calendar({
       <div className={`month-grid ${calendarClassNames.monthGrid || ""}`}>
         {months.map((month) => (
           <button
+            type="button"
             key={month.value}
             onClick={() => handleMonthChange(month.value)}
             className={`month-button ${
@@ -271,6 +274,7 @@ export function Calendar({
       <div className={`year-grid ${calendarClassNames.yearGrid || ""}`}>
         {years.map((year) => (
           <button
+            type="button"
             key={year}
             ref={
               (
@@ -303,12 +307,14 @@ export function Calendar({
     <>
       <div className={`calendar-header ${calendarClassNames.header || ""}`}>
         <button
+          type="button"
           onClick={handlePrevMonth}
           className={`nav-button ${calendarClassNames.navButton || ""}`}
         >
           <ChevronLeft className={`icon ${calendarClassNames.icon || ""}`} />
         </button>
         <button
+          type="button"
           onClick={() => setCurrentView("month")}
           className={`month-year-button ${
             calendarClassNames.monthYearButton || ""
@@ -323,6 +329,7 @@ export function Calendar({
               ).getFullYear()}`}
         </button>
         <button
+          type="button"
           onClick={handleNextMonth}
           className={`nav-button ${calendarClassNames.navButton || ""}`}
         >

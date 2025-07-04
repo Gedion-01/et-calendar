@@ -375,6 +375,7 @@ export default function TimePicker({
               >
                 {["AM", "PM"].map((period) => (
                   <button
+                    type="button"
                     key={period}
                     className={`am-pm-button ${
                       timePickerClassNames.amPmButton || ""

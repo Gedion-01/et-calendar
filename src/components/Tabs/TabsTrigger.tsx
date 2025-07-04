@@ -12,6 +12,7 @@ export function TabsTrigger({ value, className, children }: TabsTriggerProps) {
 
   return (
     <button
+      type="button"
       className={`tabs-trigger ${className || ""} ${
         activeTab === value ? "active" : ""
       }`}
