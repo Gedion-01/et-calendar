@@ -137,21 +137,20 @@ export default function TimePicker({
   };
 
   const toggleTimeFormat = () => {
-    setTimeFormat((prev) => {
-      const newFormat = prev === "12h" ? "24h" : "12h";
-      const [hour, minute] = localSelectedTime.split(":");
-      const [minuteValue, period] = minute.split(" ");
+    const newFormat = timeFormat === "12h" ? "24h" : "12h";
+    const [hour, minute] = localSelectedTime.split(":");
+    const [minuteValue, period] = minute.split(" ");
 
-      let newHour: string;
-      let newPeriod = "";
+    let newHour:string;
+    let newPeriod= "";
 
-      if (newFormat === "24h") {
-        newHour = (
-          parseInt(hour) + (period === "PM" && parseInt(hour) !== 12 ? 12 : 0)
-        )
-          .toString()
-          .padStart(2, "0");
-        if (newHour === "24") newHour = "00";
+    if (newFormat === "24h") {
+      newHour = (
+        parseInt(hour) + (period === "PM" && parseInt(hour) !== 12 ? 12 : 0)
+      )
+        .toString()
+        .padStart(2, "0");
+      if (newHour === "24") newHour = "00";
       } else {
         let hourNum = parseInt(hour);
         if (hourNum === 0) {
@@ -172,12 +171,11 @@ export default function TimePicker({
       const newTime = `${newHour}:${minuteValue}${
         newPeriod ? ` ${newPeriod}` : ""
       }`;
-      setLocalSelectedTime(newTime);
-      onTimeChange(newTime);
-      return newFormat;
-    });
-  };
 
+    setTimeFormat(newFormat);
+    setLocalSelectedTime(newTime);
+    onTimeChange(newTime);
+  };
   const formatTime = (time: string): string => {
     const [hour, minute] = time.split(":");
     const [minuteValue, period] = minute.split(" ");
