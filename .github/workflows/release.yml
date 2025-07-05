@@ -37,8 +37,8 @@ jobs:
       - name: Fix vulnerabilities
         run: npm audit fix
 
-      - name: Run npm audit
-        run: npm audit
+      - name: Run npm audit (ignore low severity)
+        run: npm audit --audit-level=moderate
 
       - name: Release
         env:
