@@ -36,6 +36,7 @@ jobs:
 
       - name: Fix vulnerabilities
         run: npm audit fix
+        continue-on-error: true
 
       - name: Run npm audit (ignore low severity)
         run: npm audit --audit-level=moderate
