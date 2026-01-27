@@ -10,10 +10,12 @@ import { sanitizeDateFormat } from "../../utils/sanitizeDateFormat";
 import { PopoverButton } from "../Popover/PopoverButton";
 import { PopoverPanel } from "../Popover/PopoverPanel";
 import { Popover } from "../Popover/Popover";
+import { usePopoverContext } from "../Popover/PopoverContext";
 import { TabsRoot } from "../Tabs/TabsRoot";
 import { TabsList } from "../Tabs/TabsList";
 import { TabsTrigger } from "../Tabs/TabsTrigger";
 import { TabsContent } from "../Tabs/TabsContent";
+import { useEffect } from "react";
 
 export function DatePicker({
   selectedDate,
@@ -21,6 +23,11 @@ export function DatePicker({
   showCalendars,
   viewFirst = "Gregorian",
   dateFormat = "MMMM dd, yyyy",
+  minDate,
+  maxDate,
+  clampNavigation = false,
+  enforceInitialWithinRange = true,
+  closeOnSelect = true,
   datePickerClassNames = {},
   calanderClassNames = {},
   popoverProps = {
@@ -38,11 +45,125 @@ export function DatePicker({
     selectedDate && viewFirst === "Ethiopian"
       ? useFormattedEthiopianDate(
           EthiopianDate.toEth(selectedDate),
-          sanitizedFormat
+          sanitizedFormat,
         )
       : selectedDate
-      ? useFormattedDate(selectedDate, sanitizedFormat)
-      : sanitizedFormat;
+        ? useFormattedDate(selectedDate, sanitizedFormat)
+        : sanitizedFormat;
+
+  // Optionally enforce the initial selectedDate to be within [minDate, maxDate]
+  useEffect(() => {
+    if (!enforceInitialWithinRange) return;
+    if (!selectedDate) return;
+    const normalize = (d?: Date) =>
+      d ? new Date(d.getFullYear(), d.getMonth(), d.getDate()) : undefined;
+    const sel = normalize(selectedDate)!;
+    const minN = normalize(minDate);
+    const maxN = normalize(maxDate);
+    let clamped: Date | undefined = sel;
+    if (minN && sel < minN) clamped = new Date(minN);
+    if (maxN && sel > maxN) clamped = new Date(maxN);
+    if (clamped && clamped.getTime() !== sel.getTime()) {
+      // Preserve original time parts if provided
+      const hours = selectedDate.getHours();
+      const minutes = selectedDate.getMinutes();
+      const seconds = selectedDate.getSeconds();
+      const adjusted = new Date(
+        clamped.getFullYear(),
+        clamped.getMonth(),
+        clamped.getDate(),
+        hours,
+        minutes,
+        seconds,
+      );
+      onDateChange(adjusted);
+    }
+  }, [selectedDate, minDate, maxDate, enforceInitialWithinRange, onDateChange]);
+
+  // Define inner panel content component to access Popover context
+  function PanelContent() {
+    const { setIsOpen } = usePopoverContext();
+    const handle = (d: Date) => {
+      onDateChange(d);
+      if (closeOnSelect) setIsOpen(false);
+    };
+    return (
+      <>
+        {showCalendars === "both" ? (
+          <TabsRoot
+            initialActiveTab={
+              viewFirst === "Ethiopian" ? "ethiopian" : "gregorian"
+            }
+          >
+            <TabsList className={datePickerClassNames.tabsList || ""}>
+              <TabsTrigger
+                value="ethiopian"
+                className={`tabs-trigger ${
+                  datePickerClassNames.tabsTrigger || ""
+                }`}
+              >
+                {ethiopianTabName}
+              </TabsTrigger>
+              <TabsTrigger
+                value="gregorian"
+                className={`tabs-trigger ${
+                  datePickerClassNames.tabsTrigger || ""
+                }`}
+              >
+                {gregorianTabName}
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent
+              value="ethiopian"
+              className={`tabs-content ${
+                datePickerClassNames.tabsContent || ""
+              }`}
+            >
+              <EthiopianDatePicker
+                selectedDate={selectedDate}
+                onDateChange={handle}
+                minDate={minDate}
+                maxDate={maxDate}
+                clampNavigation={clampNavigation}
+                calanderClassNames={calanderClassNames}
+              />
+            </TabsContent>
+            <TabsContent
+              value="gregorian"
+              className={`tabs-content ${
+                datePickerClassNames.tabsContent || ""
+              }`}
+            >
+              <GregorianDatePicker
+                selectedDate={selectedDate}
+                onDateChange={handle}
+                minDate={minDate}
+                maxDate={maxDate}
+                clampNavigation={clampNavigation}
+                calanderClassNames={calanderClassNames}
+              />
+            </TabsContent>
+          </TabsRoot>
+        ) : showCalendars === "ethiopian" ? (
+          <EthiopianDatePicker
+            selectedDate={selectedDate}
+            onDateChange={handle}
+            minDate={minDate}
+            maxDate={maxDate}
+            clampNavigation={clampNavigation}
+          />
+        ) : (
+          <GregorianDatePicker
+            selectedDate={selectedDate}
+            onDateChange={handle}
+            minDate={minDate}
+            maxDate={maxDate}
+            clampNavigation={clampNavigation}
+          />
+        )}
+      </>
+    );
+  }
 
   return (
     <div
@@ -77,66 +198,7 @@ export function DatePicker({
           sideOffset={popoverProps.sideOffset}
           alignOffset={popoverProps.alignOffset}
         >
-          {showCalendars === "both" ? (
-            <TabsRoot
-              initialActiveTab={
-                viewFirst === "Ethiopian" ? "ethiopian" : "gregorian"
-              }
-            >
-              <TabsList className={datePickerClassNames.tabsList || ""}>
-                <TabsTrigger
-                  value="ethiopian"
-                  className={`tabs-trigger ${
-                    datePickerClassNames.tabsTrigger || ""
-                  }`}
-                >
-                  {ethiopianTabName}
-                </TabsTrigger>
-                <TabsTrigger
-                  value="gregorian"
-                  className={`tabs-trigger ${
-                    datePickerClassNames.tabsTrigger || ""
-                  }`}
-                >
-                  {gregorianTabName}
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent
-                value="ethiopian"
-                className={`tabs-content ${
-                  datePickerClassNames.tabsContent || ""
-                }`}
-              >
-                <EthiopianDatePicker
-                  selectedDate={selectedDate}
-                  onDateChange={onDateChange}
-                  calanderClassNames={calanderClassNames}
-                />
-              </TabsContent>
-              <TabsContent
-                value="gregorian"
-                className={`tabs-content ${
-                  datePickerClassNames.tabsContent || ""
-                }`}
-              >
-                <GregorianDatePicker
-                  selectedDate={selectedDate}
-                  onDateChange={onDateChange}
-                  calanderClassNames={calanderClassNames}
-                />
-              </TabsContent>
-            </TabsRoot>
-          ) : showCalendars === "ethiopian" ? (
-            <EthiopianDatePicker
-              selectedDate={selectedDate}
-              onDateChange={onDateChange}
-            />
-          ) : (
-            <GregorianDatePicker
-              selectedDate={selectedDate}
-              onDateChange={onDateChange}
-            />
-          )}
+          <PanelContent />
         </PopoverPanel>
       </Popover>
     </div>

@@ -6,10 +6,13 @@ import { EthiopianDatePickerProps } from "../../types";
 export function EthiopianDatePicker({
   selectedDate,
   onDateChange,
+  minDate,
+  maxDate,
+  clampNavigation,
   calanderClassNames = {},
 }: EthiopianDatePickerProps) {
   const [ethDate, setEthDate] = useState(
-    EthiopianDate.toEth(selectedDate || new Date())
+    EthiopianDate.toEth(selectedDate || new Date()),
   );
 
   useEffect(() => {
@@ -31,7 +34,7 @@ export function EthiopianDatePicker({
       gregDate.getDate(),
       hours,
       minutes,
-      seconds
+      seconds,
     );
 
     onDateChange(gregDate);
@@ -44,6 +47,9 @@ export function EthiopianDatePicker({
         date={ethDate}
         onChange={handleEthDateChange}
         isEthiopian={true}
+        minDate={minDate}
+        maxDate={maxDate}
+        clampNavigation={clampNavigation}
         calendarClassNames={calanderClassNames}
       />
     </div>

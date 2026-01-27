@@ -6,11 +6,13 @@ import { Popover } from "../Popover/Popover";
 import { PopoverButton } from "../Popover/PopoverButton";
 import { PopoverPanel } from "../Popover/PopoverPanel";
 import { Switch } from "../Switch/Switch";
+import { usePopoverContext } from "../Popover/PopoverContext";
 
 export default function TimePicker({
   selectedTime,
   onTimeChange,
   timeFormat: initialTimeFormat = "12h",
+  closeOnSelect = true,
   timePickerClassNames = {},
   popoverProps = {
     anchor: "bottom",
@@ -20,7 +22,7 @@ export default function TimePicker({
   },
 }: TimePickerProps) {
   const [localSelectedTime, setLocalSelectedTime] = useState(
-    selectedTime || "12:00 AM"
+    selectedTime || "12:00 AM",
   );
   const [timeFormat, setTimeFormat] = useState<TimeFormat>(initialTimeFormat);
 
@@ -30,11 +32,11 @@ export default function TimePicker({
   const hours =
     timeFormat === "12h"
       ? Array.from({ length: 12 }, (_, i) =>
-          (i + 1).toString().padStart(2, "0")
+          (i + 1).toString().padStart(2, "0"),
         )
       : Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, "0"));
   const minutes = Array.from({ length: 60 }, (_, i) =>
-    i.toString().padStart(2, "0")
+    i.toString().padStart(2, "0"),
   );
 
   useEffect(() => {
@@ -54,12 +56,12 @@ export default function TimePicker({
 
   const scrollToSelectedItem = (
     ref: React.RefObject<HTMLDivElement>,
-    value: string
+    value: string,
   ) => {
     if (ref.current) {
       const container = ref.current;
       const selectedElement = container.querySelector(
-        `[data-value="${value}"]`
+        `[data-value="${value}"]`,
       ) as HTMLElement;
       if (selectedElement) {
         const containerHeight = container.clientHeight;
@@ -141,8 +143,8 @@ export default function TimePicker({
     const [hour, minute] = localSelectedTime.split(":");
     const [minuteValue, period] = minute.split(" ");
 
-    let newHour:string;
-    let newPeriod= "";
+    let newHour: string;
+    let newPeriod = "";
 
     if (newFormat === "24h") {
       newHour = (
@@ -151,26 +153,26 @@ export default function TimePicker({
         .toString()
         .padStart(2, "0");
       if (newHour === "24") newHour = "00";
+    } else {
+      let hourNum = parseInt(hour);
+      if (hourNum === 0) {
+        newHour = "12";
+        newPeriod = "AM";
+      } else if (hourNum === 12) {
+        newHour = "12";
+        newPeriod = "PM";
+      } else if (hourNum > 12) {
+        newHour = (hourNum - 12).toString().padStart(2, "0");
+        newPeriod = "PM";
       } else {
-        let hourNum = parseInt(hour);
-        if (hourNum === 0) {
-          newHour = "12";
-          newPeriod = "AM";
-        } else if (hourNum === 12) {
-          newHour = "12";
-          newPeriod = "PM";
-        } else if (hourNum > 12) {
-          newHour = (hourNum - 12).toString().padStart(2, "0");
-          newPeriod = "PM";
-        } else {
-          newHour = hour;
-          newPeriod = "AM";
-        }
+        newHour = hour;
+        newPeriod = "AM";
       }
+    }
 
-      const newTime = `${newHour}:${minuteValue}${
-        newPeriod ? ` ${newPeriod}` : ""
-      }`;
+    const newTime = `${newHour}:${minuteValue}${
+      newPeriod ? ` ${newPeriod}` : ""
+    }`;
 
     setTimeFormat(newFormat);
     setLocalSelectedTime(newTime);
@@ -200,27 +202,23 @@ export default function TimePicker({
     }
   };
 
-  return (
-    <Popover onOpenChange={handleOpenChange}>
-      <PopoverButton
-        className={`trigger-button ${timePickerClassNames.triggerButton || ""}`}
-      >
-        <Clock className={`icon ${timePickerClassNames.icon || ""}`} />
-        <span
-          className={`time-display ${timePickerClassNames.timeDisplay || ""} ${
-            !selectedTime ? "placeholder" : ""
-          }`}
-        >
-          {formatTime(localSelectedTime)}
-        </span>
-      </PopoverButton>
-      <PopoverPanel
-        className={`${timePickerClassNames.popoverContent || ""}`}
-        anchor={popoverProps.anchor}
-        align={popoverProps.align}
-        sideOffset={popoverProps.sideOffset}
-        alignOffset={popoverProps.alignOffset}
-      >
+  function PanelContent() {
+    const { setIsOpen } = usePopoverContext();
+
+    const handleTimeSelect = (type: "hour" | "minute", value: string) => {
+      handleTimeClick(type, value);
+      if (closeOnSelect && type === "minute") {
+        setIsOpen(false);
+      }
+    };
+
+    const handlePeriodSelect = (period: "AM" | "PM") => {
+      handlePeriodClick(period);
+      if (closeOnSelect) setIsOpen(false);
+    };
+
+    return (
+      <>
         <div className={`header ${timePickerClassNames.header || ""}`}>
           <h3 className={`heading ${timePickerClassNames.heading || ""}`}>
             Select Time
@@ -240,7 +238,7 @@ export default function TimePicker({
             <Switch
               checked={timeFormat === "24h"}
               onChange={toggleTimeFormat}
-              className={`switch-roo${timePickerClassNames.switchRoot || ""}`}
+              className={`switch-root ${timePickerClassNames.switchRoot || ""}`}
             />
           </div>
         </div>
@@ -285,12 +283,12 @@ export default function TimePicker({
                       timePickerClassNames.timeItem || ""
                     } ${
                       convertHourToCurrentFormat(
-                        localSelectedTime.split(":")[0]
+                        localSelectedTime.split(":")[0],
                       ) === hour
                         ? `${timePickerClassNames.activeTimeItem || "active"}`
                         : ""
                     }`}
-                    onClick={() => handleTimeClick("hour", hour)}
+                    onClick={() => handleTimeSelect("hour", hour)}
                     data-value={hour}
                   >
                     {hour}
@@ -306,7 +304,9 @@ export default function TimePicker({
             className={`time-section ${timePickerClassNames.timeSection || ""}`}
           >
             <div
-              className={`time-section-title ${timePickerClassNames.timeSectionTitle}`}
+              className={`time-section-title ${
+                timePickerClassNames.timeSectionTitle || ""
+              }`}
             >
               Minute
             </div>
@@ -341,7 +341,7 @@ export default function TimePicker({
                         ? `${timePickerClassNames.activeTimeItem || "active"}`
                         : ""
                     }`}
-                    onClick={() => handleTimeClick("minute", minute)}
+                    onClick={() => handleTimeSelect("minute", minute)}
                     data-value={minute}
                   >
                     {minute}
@@ -388,7 +388,7 @@ export default function TimePicker({
                           }`
                         : ""
                     }`}
-                    onClick={() => handlePeriodClick(period as "AM" | "PM")}
+                    onClick={() => handlePeriodSelect(period as "AM" | "PM")}
                   >
                     {period}
                   </button>
@@ -397,6 +397,32 @@ export default function TimePicker({
             </div>
           )}
         </div>
+      </>
+    );
+  }
+
+  return (
+    <Popover onOpenChange={handleOpenChange}>
+      <PopoverButton
+        className={`trigger-button ${timePickerClassNames.triggerButton || ""}`}
+      >
+        <Clock className={`icon ${timePickerClassNames.icon || ""}`} />
+        <span
+          className={`time-display ${timePickerClassNames.timeDisplay || ""} ${
+            !selectedTime ? "placeholder" : ""
+          }`}
+        >
+          {formatTime(localSelectedTime)}
+        </span>
+      </PopoverButton>
+      <PopoverPanel
+        className={`${timePickerClassNames.popoverContent || ""}`}
+        anchor={popoverProps.anchor}
+        align={popoverProps.align}
+        sideOffset={popoverProps.sideOffset}
+        alignOffset={popoverProps.alignOffset}
+      >
+        <PanelContent />
       </PopoverPanel>
     </Popover>
   );

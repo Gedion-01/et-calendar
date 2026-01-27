@@ -13,8 +13,9 @@ Is the most **feature-rich React library** that provides components, hooks, and 
 
 ## Features
 
-- **DatePicker Component**: A customizable date picker supporting Ethiopian and Gregorian calendars.
-- **DateTimePicker Component**: A date-time picker for selecting both dates and times.
+- **DatePicker Component**: Customizable Ethiopian/Gregorian picker with min/max bounds, optional clamped navigation, and close-on-select.
+- **DateTimePicker Component**: Date + time picker with the same bounds/close-on-select behaviors and 12h/24h time support.
+- **TimePicker Component**: Standalone time selector with close-on-select (after minute) and 12h/24h toggle.
 - **Custom Hooks**: Hooks for formatting and manipulating dates.
 - **Utilities**: Functions for Ethiopian date conversions and operations.
 - **Fully TypeScript Supported**: Includes comprehensive type definitions for better TypeScript integration.
@@ -60,6 +61,11 @@ const App = () => {
       showCalendars="both" // Options: "gregorian" | "ethiopian" | "both"
       viewFirst="Gregorian" // Options: "Gregorian" | "Ethiopian"
       dateFormat="MMMM dd, yyyy" // Time tokens will be ignored in DatePicker
+      minDate={new Date(2020, 0, 1)}
+      maxDate={new Date(2030, 11, 31)}
+      clampNavigation // Prevent navigating outside min/max
+      enforceInitialWithinRange // Clamp initial selection into min/max range
+      closeOnSelect // Close popover after day pick
     />
   );
 };
@@ -92,6 +98,10 @@ const App = () => {
       viewFirst="Ethiopian" // Options: "Gregorian" | "Ethiopian"
       dateFormat="MMMM dd, yyyy"
       timeFormat="24h" // Options: "12h" | "24h"
+      minDate={new Date(2020, 0, 1)}
+      maxDate={new Date(2030, 11, 31)}
+      clampNavigation // Prevent navigating outside min/max
+      closeOnSelect // Close after date pick and after minute pick in time
     />
   );
 };
@@ -198,35 +208,21 @@ import { DatePicker } from "et-calendar";
 
 **Props**
 
-- `selectedDate?: Date`  
-  The currently selected date.
+- `selectedDate?: Date` — Currently selected date.
+- `onDateChange: (date: Date) => void` — Callback when the date changes.
+- `showCalendars: 'ethiopian' | 'gregorian' | 'both'` — Which calendars to display.
+- `viewFirst?: 'Ethiopian' | 'Gregorian'` — Initial tab when showing both. Default: "Gregorian".
+- `dateFormat?: string` — Display format (time tokens ignored).
+- `minDate?: Date` / `maxDate?: Date` — Bounds for selection and navigation.
+- `clampNavigation?: boolean` — Prevent navigating outside min/max months/years.
+- `enforceInitialWithinRange?: boolean` — Clamp initial selectedDate into min/max.
+- `closeOnSelect?: boolean` — Close popover after selecting a date. Default: true.
+- `datePickerClassNames?: DatePickerClassNames` — Styling hooks for trigger/panel/tabs.
+- `calanderClassNames?: CalendarClassNames` — Styling hooks for the calendar grid.
+- `popoverProps?: PopoverProps` — Popover positioning tweaks.
+- `ethiopianTabName?: string` / `gregorianTabName?: string` — Custom tab labels.
 
-- `onDateChange: (date: Date) => void`  
-  Callback when the date changes.
-
-- `showCalendars: 'ethiopian' | 'gregorian' | 'both'`  
-  Determines which calendars to display.
-
-- `viewFirst?: 'Ethiopian' | 'Gregorian'`  
-  Specifies the initial calendar view when both calendars are shown. Default is "Gregorian".
-
-- `dateFormat?: string`  
-  Format string for displaying the date. Note: Time-related tokens will be ignored.
-
-- `datePickerClassNames?: DatePickerClassNames`  
-  Custom class names for styling the date picker.
-
-- `calanderClassNames?: CalendarClassNames`  
-  Custom class names for styling the calendar.
-
-- `popoverProps?: PopoverProps`  
-  Props to customize the popover behavior.
-
-- `ethiopianTabName?: string`  
-  Custom label for the Ethiopian calendar tab when both calendars are displayed.
-
-- `gregorianTabName?: string`  
-  Custom label for the Gregorian calendar tab when both calendars are displayed.
+  _All props are optional unless noted. Defaults shown above apply when omitted._
 
 #### DateTimePicker
 
@@ -242,53 +238,32 @@ import { DateTimePicker } from "et-calendar";
 
 **Props**
 
-- `selectedDateTime?: Date`  
-  The currently selected date and time.
+- `selectedDate?: Date` — Currently selected date/time.
+- `onDateChange: (date: Date) => void` — Callback on date/time change.
+- `showCalendars: 'ethiopian' | 'gregorian' | 'both'` — Which calendars to show.
+- `viewFirst?: 'Ethiopian' | 'Gregorian'` — Initial tab when showing both. Default: "Gregorian".
+- `dateFormat?: string` — Display format for the date portion.
+- `timeFormat?: '12h' | '24h'` — Time picker mode. Default: "12h".
+- `minDate?: Date` / `maxDate?: Date` — Bounds for selection and navigation.
+- `clampNavigation?: boolean` — Prevent navigating outside min/max months/years.
+- `enforceInitialWithinRange?: boolean` — Clamp initial selectedDate into min/max. Default: true.
+- `closeOnSelect?: boolean` — Close popovers after picking a date and after picking minutes (and AM/PM) in the time picker.
+- `datePickerClassNames?: DatePickerClassNames` — Styling hooks for the date trigger/panel/tabs.
+- `timePickerClassNames?: TimePickerClassNames` — Styling hooks for the time picker.
+- `calanderClassNames?: CalendarClassNames` — Styling hooks for the calendar grid.
+- `popoverProps?: PopoverProps` — Popover positioning tweaks.
+- `ethiopianTabName?: string` / `gregorianTabName?: string` — Custom tab labels.
 
-- `onDateTimeChange: (dateTime: Date) => void`  
-  Callback function that is called when the date or time changes. Receives the new `Date` object as a parameter.
+#### TimePicker (standalone)
 
-- `showCalendars: 'ethiopian' | 'gregorian' | 'both'`  
-  Determines which calendars are displayed in the picker.
+- `selectedTime?: string` — Current time value.
+- `onTimeChange: (time: string) => void` — Callback on time change.
+- `timeFormat?: '12h' | '24h'` — Mode (default 12h).
+- `closeOnSelect?: boolean` — Close popover after minute (and AM/PM) selection. Default: true.
+- `timePickerClassNames?: TimePickerClassNames` — Styling hooks.
+- `popoverProps?: PopoverProps` — Popover positioning tweaks.
 
-  - `'ethiopian'`: Only the Ethiopian calendar is shown.
-  - `'gregorian'`: Only the Gregorian calendar is shown.
-  - `'both'`: Both calendars are displayed, typically in a tabbed interface.
-
-- `viewFirst?: 'Ethiopian' | 'Gregorian'`  
-  Specifies which calendar is displayed first when both calendars are available.
-
-  - **Default**: `'Gregorian'`
-
-- `dateFormat?: string`  
-  Format string for displaying the date portion. Uses tokens from date formatting libraries (e.g., `date-fns`). Time-related tokens will be ignored for the date portion.
-
-  Example: `'MMMM dd, yyyy'`
-
-- `timeFormat?: '12h' | '24h'`  
-  Determines the time format used in the time picker.
-
-  - `'12h'`: 12-hour format with AM/PM indicators.
-  - `'24h'`: 24-hour format.
-  - **Default**: `'12h'`
-
-- `dateTimePickerClassNames?: DateTimePickerClassNames`  
-  Custom class names for styling various parts of the DateTimePicker component.
-
-- `calendarClassNames?: CalendarClassNames`  
-  Custom class names for styling the calendar component within the picker.
-
-- `timePickerClassNames?: TimePickerClassNames`  
-  Custom class names for styling the time picker component.
-
-- `popoverProps?: PopoverProps`  
-  Props for customizing the behavior contains the picker.
-
-- `ethiopianTabName?: string`  
-  Custom label for the Ethiopian calendar tab when both calendars are displayed.
-
-- `gregorianTabName?: string`  
-  Custom label for the Gregorian calendar tab when both calendars are displayed.
+  _All props are optional unless noted. Defaults shown above apply when omitted._
 
 ### EthiopianDate Namespace
 
@@ -367,7 +342,7 @@ const date = new Date();
 const formattedDate = useFormattedDate(
   date,
   "MMMM dd, yyyy",
-  "America/New_York"
+  "America/New_York",
 );
 console.log(formattedDate); // Outputs: "October 25, 2023"
 ```
@@ -405,7 +380,7 @@ const dateTime = new Date();
 const formattedDateTime = useFormattedDateTime(
   dateTime,
   "MMMM dd, yyyy HH:mm",
-  "America/New_York"
+  "America/New_York",
 );
 console.log(formattedDateTime); // Outputs: "October 25, 2023 14:30"
 ```
