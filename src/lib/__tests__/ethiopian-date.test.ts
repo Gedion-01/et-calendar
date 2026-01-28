@@ -79,4 +79,40 @@ describe("EthiopianDate", () => {
       "Pagume has only 6 days in year 2015"
     );
   });
+
+  it("should convert Gregorian datetime to Ethiopian EtDateTime with time preserved", () => {
+    const gregorianDate = new Date(Date.UTC(2023, 8, 11, 15, 30, 45));
+
+    const baseEthiopianDate = EthiopianDate.toEth(gregorianDate);
+    const ethiopianDateTime = EthiopianDate.toEthDateTime(gregorianDate);
+
+    expect(ethiopianDateTime.Year).toBe(baseEthiopianDate.Year);
+    expect(ethiopianDateTime.Month).toBe(baseEthiopianDate.Month);
+    expect(ethiopianDateTime.Day).toBe(baseEthiopianDate.Day);
+
+    expect(ethiopianDateTime.hours).toBe(gregorianDate.getHours());
+    expect(ethiopianDateTime.minutes).toBe(gregorianDate.getMinutes());
+    expect(ethiopianDateTime.seconds).toBe(gregorianDate.getSeconds());
+  });
+
+  it("should convert Ethiopian EtDateTime to Gregorian datetime with time preserved", () => {
+    const ethiopianDateTime: EthiopianDate.EtDateTime = {
+      Year: 2016,
+      Month: 1,
+      Day: 1,
+      hours: 10,
+      minutes: 15,
+      seconds: 30,
+    };
+
+    const gregorianDateTime = EthiopianDate.toGregDateTime(ethiopianDateTime);
+
+    expect(gregorianDateTime.getFullYear()).toBe(2023);
+    expect(gregorianDateTime.getMonth()).toBe(8); // September (0-based)
+    expect(gregorianDateTime.getDate()).toBe(12);
+
+    expect(gregorianDateTime.getHours()).toBe(10);
+    expect(gregorianDateTime.getMinutes()).toBe(15);
+    expect(gregorianDateTime.getSeconds()).toBe(30);
+  });
 });

@@ -84,20 +84,31 @@ export namespace EthiopianDate {
 
     const remainingMonths = Math.floor(
       (difference - fourYearsPassed * fourYears - remainingYears * oneYear) /
-        (30 * oneDay)
+      (30 * oneDay)
     );
     const remainingDays = Math.floor(
       (difference -
         fourYearsPassed * fourYears -
         remainingYears * oneYear -
         remainingMonths * 30 * oneDay) /
-        oneDay
+      oneDay
     );
 
     return {
       Year: remainingYears + 4 * fourYearsPassed + 1964,
       Month: remainingMonths + 1,
       Day: remainingDays + 1,
+    };
+  }
+
+  export function toEthDateTime(gregorianDate: Date): EtDateTime {
+    const base = toEth(gregorianDate);
+
+    return {
+      ...base,
+      hours: gregorianDate.getHours(),
+      minutes: gregorianDate.getMinutes(),
+      seconds: gregorianDate.getSeconds(),
     };
   }
 
@@ -128,14 +139,14 @@ export namespace EthiopianDate {
 
       const remMonths = Math.floor(
         (diff - fourYearsPassed * fourYears - remainingYears * oneYear) /
-          (30 * oneDay)
+        (30 * oneDay)
       );
       const remDays = Math.floor(
         (diff -
           fourYearsPassed * fourYears -
           remainingYears * oneYear -
           remMonths * 30 * oneDay) /
-          oneDay
+        oneDay
       );
 
       if (ethDate.Day === remDays + 1 && ethDate.Month === remMonths + 1) {
@@ -144,6 +155,23 @@ export namespace EthiopianDate {
     }
 
     throw new Error("Could not find a corresponding Gregorian date");
+  }
+
+  export function toGregDateTime(ethDateTime: EtDateTime): Date {
+    const base = toGreg({
+      Day: ethDateTime.Day,
+      Month: ethDateTime.Month,
+      Year: ethDateTime.Year,
+    });
+
+    base.setHours(
+      ethDateTime.hours,
+      ethDateTime.minutes,
+      ethDateTime.seconds ?? 0,
+      0,
+    );
+
+    return base;
   }
 
   export function getEtMonthName(
