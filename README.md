@@ -61,7 +61,7 @@ function App() {
       viewFirst="Gregorian" // Options: "Gregorian" | "Ethiopian"
       dateFormat="MMMM dd, yyyy" // Time tokens will be ignored in DatePicker
       minDate={new Date(2020, 0, 1)}
-      maxDate={new Date(2030, 11, 31)}
+      maxDate={new Date(2090, 11, 31)}
       clampNavigation // Prevent navigating outside min/max
       enforceInitialWithinRange // Clamp initial selection into min/max range
       closeOnSelect // Close popover after day pick
@@ -101,7 +101,7 @@ function App() {
       dateFormat="MMMM dd, yyyy"
       timeFormat="24h" // Options: "12h" | "24h"
       minDate={new Date(2020, 0, 1)}
-      maxDate={new Date(2030, 11, 31)}
+      maxDate={new Date(2090, 11, 31)}
       clampNavigation // Prevent navigating outside min/max
       closeOnSelect // Close after date pick and after minute pick in time
     />
