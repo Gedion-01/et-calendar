@@ -73,6 +73,11 @@ export interface DatePickerProps {
   showCalendars: "ethiopian" | "gregorian" | "both";
   viewFirst?: "Ethiopian" | "Gregorian";
   dateFormat?: string; // Note: Time-related tokens will be ignored
+  minDate?: Date;
+  maxDate?: Date;
+  clampNavigation?: boolean;
+  enforceInitialWithinRange?: boolean;
+  closeOnSelect?: boolean;
   datePickerClassNames?: DatePickerClassNames;
   calanderClassNames?: CalendarClassNames;
   popoverProps?: PopoverProps;
@@ -87,6 +92,11 @@ export interface DateTimePickerProps {
   viewFirst?: "Ethiopian" | "Gregorian";
   dateFormat?: string; // Note: Time-related tokens will be ignored
   timeFormat?: TimeFormat;
+  minDate?: Date;
+  maxDate?: Date;
+  clampNavigation?: boolean;
+  enforceInitialWithinRange?: boolean;
+  closeOnSelect?: boolean;
   datePickerClassNames?: DatePickerClassNames;
   timePickerClassNames?: TimePickerClassNames;
   calanderClassNames?: CalendarClassNames;
@@ -99,6 +109,9 @@ export interface CalendarProps {
   date: Date | EthiopianDate.EtDate;
   onChange: (date: any) => void;
   isEthiopian: boolean;
+  minDate?: Date;
+  maxDate?: Date;
+  clampNavigation?: boolean;
 
   calendarClassNames?: CalendarClassNames;
 }
@@ -109,6 +122,7 @@ export interface TimePickerProps {
   selectedTime?: string;
   onTimeChange: (time: string) => void;
   timeFormat?: TimeFormat;
+  closeOnSelect?: boolean;
   timePickerClassNames?: TimePickerClassNames;
   popoverProps?: PopoverProps;
 }
@@ -116,12 +130,18 @@ export interface TimePickerProps {
 export interface EthiopianDatePickerProps {
   selectedDate?: Date;
   onDateChange: (date: Date) => void;
+  minDate?: Date;
+  maxDate?: Date;
+  clampNavigation?: boolean;
   calanderClassNames?: CalendarClassNames;
 }
 
 export interface GregorianDatePickerProps {
   selectedDate?: Date;
   onDateChange: (date: Date) => void;
+  minDate?: Date;
+  maxDate?: Date;
+  clampNavigation?: boolean;
   calanderClassNames?: CalendarClassNames;
 }
 

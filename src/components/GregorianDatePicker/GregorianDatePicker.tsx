@@ -5,6 +5,9 @@ import { GregorianDatePickerProps } from "../../types";
 export function GregorianDatePicker({
   selectedDate,
   onDateChange,
+  minDate,
+  maxDate,
+  clampNavigation,
   calanderClassNames = {},
 }: GregorianDatePickerProps) {
   const [date, setDate] = useState(selectedDate || new Date());
@@ -26,7 +29,7 @@ export function GregorianDatePicker({
       newDate.getDate(),
       hours,
       minutes,
-      seconds
+      seconds,
     );
 
     setDate(updatedDate);
@@ -39,6 +42,9 @@ export function GregorianDatePicker({
         date={date}
         onChange={handleDateChange}
         isEthiopian={false}
+        minDate={minDate}
+        maxDate={maxDate}
+        clampNavigation={clampNavigation}
         calendarClassNames={calanderClassNames}
       />
     </div>

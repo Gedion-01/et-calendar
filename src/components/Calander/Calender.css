@@ -46,6 +46,11 @@
 .nav-button:hover {
   background-color: var(--hover-background-color);
 }
+
+.nav-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 .icon {
   height: 1.5rem;
   width: 1.5rem;
@@ -111,6 +116,13 @@
 
 .day-button:hover {
   background-color: var(--hover-background-color);
+}
+
+/* Disabled Day */
+.day-button:disabled,
+.day-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* Selected Day */
