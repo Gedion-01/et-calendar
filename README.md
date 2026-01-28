@@ -41,11 +41,11 @@ yarn add et-calendar
 The DatePicker component allows users to select dates using either the Ethiopian or Gregorian calendar, or both.
 
 ```tsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { EthiopianDate } from "et-calendar/lib";
 import { DatePicker } from "et-calendar";
 
-const App = () => {
+function App() {
   const [date, setDate] = useState<Date>(() => new Date());
   const [ethDate, setEthDate] = useState(() => EthiopianDate.toEth(new Date()));
 
@@ -68,7 +68,7 @@ const App = () => {
       closeOnSelect // Close popover after day pick
     />
   );
-};
+}
 
 export default App;
 ```
@@ -78,16 +78,19 @@ export default App;
 The DateTimePicker component extends the DatePicker by including time selection.
 
 ```tsx
-import React, { useState } from "react";
+import { useState } from "react";
+import { EthiopianDate } from "et-calendar/lib";
 import { DateTimePicker } from "et-calendar";
 
-const App = () => {
-  const [date, setDate] = useState<Date>(() => new Date());
-  const [ethDate, setEthDate] = useState(() => EthiopianDate.toEth(new Date()));
+function App() {
+  const [dateTime, setDateTime] = useState<Date>(() => new Date());
+  const [ethDateTime, setEthioDateTime] = useState(() =>
+    EthiopianDate.toEthDateTime(new Date()),
+  );
 
   const handleDateTimeChange = (newDate: Date) => {
     setDateTime(newDate);
-    setEthioDateTime(EthiopianDate.toEth(newDate));
+    setEthioDateTime(EthiopianDate.toEthDateTime(newDate));
   };
 
   return (
@@ -104,7 +107,7 @@ const App = () => {
       closeOnSelect // Close after date pick and after minute pick in time
     />
   );
-};
+}
 
 export default App;
 ```
@@ -140,6 +143,34 @@ const ethDate: EthiopianDate.EtDate = {
 
 const gregorianDate = EthiopianDate.toGreg(ethDate);
 console.log(gregorianDate); // Outputs the corresponding Gregorian Date
+```
+
+#### Converting Gregorian DateTime to Ethiopian DateTime
+
+```ts
+import { EthiopianDate } from "et-calendar/lib";
+
+const currentGregorianDateTime = new Date();
+const ethDateTime = EthiopianDate.toEthDateTime(currentGregorianDateTime);
+console.log(ethDateTime); // Outputs the Ethiopian date-time object
+```
+
+#### Converting Ethiopian DateTime to Gregorian DateTime
+
+```ts
+import { EthiopianDate } from "et-calendar/lib";
+
+const ethDateTime: EthiopianDate.EtDateTime = {
+  Day: 1,
+  Month: 1,
+  Year: 2015,
+  hours: 10,
+  minutes: 30,
+  seconds: 0,
+};
+
+const gregorianDateTime = EthiopianDate.toGregDateTime(ethDateTime);
+console.log(gregorianDateTime); // Outputs the corresponding Gregorian Date with time
 ```
 
 #### Formatting Ethiopian Dates
@@ -288,6 +319,17 @@ interface EtDate {
 }
 ```
 
+- `EtDateTime`  
+  Represents an Ethiopian date with time.
+
+```ts
+interface EtDateTime extends EtDate {
+  hours: number;
+  minutes: number;
+  seconds?: number;
+}
+```
+
 #### Functions
 
 - `toEth(gregorianDate: Date): EtDate`  
@@ -295,6 +337,12 @@ interface EtDate {
 
 - `toGreg(ethDate: EtDate): Date`  
   Converts an Ethiopian date to a Gregorian date.
+
+- `toEthDateTime(gregorianDate: Date): EtDateTime`  
+  Converts a Gregorian date (with time) to an Ethiopian date-time.
+
+- `toGregDateTime(ethDateTime: EtDateTime): Date`  
+  Converts an Ethiopian date-time to a Gregorian date (including time).
 
 - `formatEtDate(date: EtDate, locale?: 'AMH' | 'EN'): string`  
   Formats an Ethiopian date as a string.
@@ -453,18 +501,18 @@ const formattedEthDateTime = useFormattedEthiopianDateTime(ethDateTime, format?)
 import { useFormattedEthiopianDateTime } from "et-calendar/hooks";
 import { EthiopianDate } from "et-calendar/lib";
 
-const ethDateTime: EtDateTime = {
+const ethDateTime: EthiopianDate.EtDateTime = {
   Day: 1,
   Month: 1,
   Year: 2015,
-  Hour: 14,
-  Minute: 30,
-  Second:
+  hours: 14,
+  minutes: 30,
+  seconds: 0,
 };
 
 const formattedEthDateTime = useFormattedEthiopianDateTime(
   ethDateTime,
-  "MMMM dd, yyyy HH:mm"
+  "MMMM dd, yyyy HH:mm",
 );
 console.log(formattedEthDateTime); // Outputs: "መስከረም 01, 2015 14:30"
 ```
