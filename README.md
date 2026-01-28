@@ -15,7 +15,6 @@ Is the most **feature-rich React library** that provides components, hooks, and 
 
 - **DatePicker Component**: Customizable Ethiopian/Gregorian picker with min/max bounds, optional clamped navigation, and close-on-select.
 - **DateTimePicker Component**: Date + time picker with the same bounds/close-on-select behaviors and 12h/24h time support.
-- **TimePicker Component**: Standalone time selector with close-on-select (after minute) and 12h/24h toggle.
 - **Custom Hooks**: Hooks for formatting and manipulating dates.
 - **Utilities**: Functions for Ethiopian date conversions and operations.
 - **Fully TypeScript Supported**: Includes comprehensive type definitions for better TypeScript integration.
@@ -284,17 +283,6 @@ import { DateTimePicker } from "et-calendar";
 - `calanderClassNames?: CalendarClassNames` — Styling hooks for the calendar grid.
 - `popoverProps?: PopoverProps` — Popover positioning tweaks.
 - `ethiopianTabName?: string` / `gregorianTabName?: string` — Custom tab labels.
-
-#### TimePicker (standalone)
-
-- `selectedTime?: string` — Current time value.
-- `onTimeChange: (time: string) => void` — Callback on time change.
-- `timeFormat?: '12h' | '24h'` — Mode (default 12h).
-- `closeOnSelect?: boolean` — Close popover after minute (and AM/PM) selection. Default: true.
-- `timePickerClassNames?: TimePickerClassNames` — Styling hooks.
-- `popoverProps?: PopoverProps` — Popover positioning tweaks.
-
-  _All props are optional unless noted. Defaults shown above apply when omitted._
 
 ### EthiopianDate Namespace
 
