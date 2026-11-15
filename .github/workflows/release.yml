@@ -21,13 +21,24 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # semantic-release needs the full history: it analyses every commit
+          # since the last tag and pushes a refs/notes/semantic-release-<version>
+          # ref, which GitHub rejects when the clone is shallow (the checkout
+          # default fetch-depth is 1).
+          fetch-depth: 0
+
       - uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit -p tsconfig.json
 
       - name: Run tests
         run: npm test

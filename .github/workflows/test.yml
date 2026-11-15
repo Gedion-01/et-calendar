@@ -27,11 +27,14 @@ jobs:
         #                      offsets parsed from local date strings)
         #   America/Santiago - DST transition at 00:00, i.e. a day whose local
         #                      midnight does not exist
+        #   Pacific/Auckland - UTC+12/+13, the far-east boundary where a UTC
+        #                      midnight lands on the next local day
         tz:
           - UTC
           - America/New_York
           - Australia/Sydney
           - America/Santiago
+          - Pacific/Auckland
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -40,6 +43,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # Type checking is time-zone independent, so run it once instead of in
+      # every matrix leg.
+      - name: Type check
+        if: matrix.tz == 'UTC'
+        run: npx tsc --noEmit -p tsconfig.json
 
       - name: Run tests
         env:
