@@ -47,6 +47,10 @@ jobs:
 
       - name: Release
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          # The job's `permissions` above already grant this token everything
+          # semantic-release needs (tags, releases, PR/issue comments).
+          # Use a PAT secret instead only if releases must trigger other
+          # workflows (GITHUB_TOKEN-initiated events do not).
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm run semantic-release
