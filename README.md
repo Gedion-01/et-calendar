@@ -324,13 +324,17 @@ interface EtDateTime extends EtDate {
   Converts a Gregorian date to an Ethiopian date.
 
 - `toGreg(ethDate: EtDate): Date`  
-  Converts an Ethiopian date to a Gregorian date.
+  Converts an Ethiopian date to a Gregorian date. The returned `Date` is at
+  local midnight of that Gregorian day, so `getFullYear()`, `getMonth()`,
+  `getDate()` and `getDay()` describe the correct calendar day in any time
+  zone.
 
 - `toEthDateTime(gregorianDate: Date): EtDateTime`  
   Converts a Gregorian date (with time) to an Ethiopian date-time.
 
 - `toGregDateTime(ethDateTime: EtDateTime): Date`  
-  Converts an Ethiopian date-time to a Gregorian date (including time).
+  Converts an Ethiopian date-time to a Gregorian date (including time) on the
+  correct local calendar day, using the supplied wall-clock time.
 
 - `formatEtDate(date: EtDate, locale?: 'AMH' | 'EN'): string`  
   Formats an Ethiopian date as a string.

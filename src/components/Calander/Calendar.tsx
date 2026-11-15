@@ -203,9 +203,9 @@ export function Calendar({
       );
     } else {
       return (
-        day === today.getUTCDate() &&
-        month === today.getUTCMonth() + 1 &&
-        year === today.getUTCFullYear()
+        day === today.getDate() &&
+        month === today.getMonth() + 1 &&
+        year === today.getFullYear()
       );
     }
   };

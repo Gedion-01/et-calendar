@@ -4,9 +4,15 @@ export namespace EthiopianDate {
   const oneYear = 365 * oneDay;
   const oneLeapYear = 366 * oneDay;
   const fourYears = 3 * oneYear + oneLeapYear;
-  const globalTimeDifference =
-    new Date("December 9, 2012").getTime() -
-    new Date("April 1, 2005").getTime();
+
+  /**
+   * Meskerem 1, 1964 E.C. corresponds to September 12, 1971 G.C. It is stored
+   * as a UTC day number (days since 1970-01-01) so every conversion below can
+   * be performed in whole calendar days, independently of the local UTC offset
+   * and of daylight-saving transitions.
+   */
+  const ethiopianEpochDay = Math.floor(Date.UTC(1971, 8, 12) / oneDay);
+
   export const minEurDate = new Date(1900, 2, 1);
   export const maxEurDate = new Date(2100, 1, 1);
 
@@ -57,6 +63,36 @@ export namespace EthiopianDate {
     "Pagume",
   ];
 
+  /** Day number (days since 1970-01-01) of the local calendar date of `date`. */
+  function toDayNumber(date: Date): number {
+    return Math.floor(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / oneDay
+    );
+  }
+
+  /** Local midnight of the Gregorian date `dayNumber` days after 1970-01-01. */
+  function fromDayNumber(dayNumber: number): Date {
+    const utcMidnight = new Date(dayNumber * oneDay);
+    return new Date(
+      utcMidnight.getUTCFullYear(),
+      utcMidnight.getUTCMonth(),
+      utcMidnight.getUTCDate()
+    );
+  }
+
+  /** Whole days from Meskerem 1, 1964 to `etDate` (negative before the epoch). */
+  function ethiopianDayOffset(etDate: EtDate): number {
+    const yearsSinceEpoch = etDate.Year - 1964;
+    const cycles = Math.floor(yearsSinceEpoch / 4);
+    const remainingYears = yearsSinceEpoch - cycles * 4;
+    return (
+      cycles * (fourYears / oneDay) +
+      remainingYears * (oneYear / oneDay) +
+      (etDate.Month - 1) * 30 +
+      (etDate.Day - 1)
+    );
+  }
+
   export function isLeapYearEt(y: number): boolean {
     return y % 4 === 3;
   }
@@ -69,12 +105,15 @@ export namespace EthiopianDate {
   }
 
   export function toEth(gregorianDate: Date): EtDate {
-    if (gregorianDate < minEurDate || gregorianDate > maxEurDate) {
+    const dayNumber = toDayNumber(gregorianDate);
+    if (
+      dayNumber < toDayNumber(minEurDate) ||
+      dayNumber > toDayNumber(maxEurDate)
+    ) {
       throw new Error("Date out of supported range");
     }
 
-    const referenceDate = new Date(1971, 8, 12); // September 12, 1971
-    const difference = gregorianDate.getTime() - referenceDate.getTime();
+    const difference = (dayNumber - ethiopianEpochDay) * oneDay;
 
     const fourYearsPassed = Math.floor(difference / fourYears);
     let remainingYears = Math.floor(
@@ -112,6 +151,11 @@ export namespace EthiopianDate {
     };
   }
 
+  /**
+   * Returns the Gregorian date for `ethDate` as a Date at local midnight, so
+   * `getFullYear() / getMonth() / getDate() / getDay()` describe the correct
+   * calendar day in every time zone.
+   */
   export function toGreg(ethDate: EtDate): Date {
     if (ethDate.Month === 13) {
       const maxDate = ethDate.Year % 4 === 3 ? 6 : 5;
@@ -122,15 +166,12 @@ export namespace EthiopianDate {
       }
     }
 
-    const initialEuropeanDate =
-      new Date(
-        Date.UTC(ethDate.Year, ethDate.Month - 1, ethDate.Day)
-      ).getTime() + globalTimeDifference;
+    const initialGregorianDay = ethiopianEpochDay + ethiopianDayOffset(ethDate);
 
     for (let count = -8; count <= 8; count++) {
-      const eurDate = new Date(initialEuropeanDate + count * oneDay);
-      const diff =
-        eurDate.getTime() - new Date(Date.UTC(1971, 8, 12)).getTime();
+      const candidateDay = initialGregorianDay + count;
+      const diff = (candidateDay - ethiopianEpochDay) * oneDay;
+
       const fourYearsPassed = Math.floor(diff / fourYears);
       let remainingYears = Math.floor(
         (diff - fourYearsPassed * fourYears) / oneYear
@@ -150,7 +191,7 @@ export namespace EthiopianDate {
       );
 
       if (ethDate.Day === remDays + 1 && ethDate.Month === remMonths + 1) {
-        return eurDate;
+        return fromDayNumber(candidateDay);
       }
     }
 
