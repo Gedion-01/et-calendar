@@ -38,34 +38,34 @@
   },
   "homepage": "https://github.com/Gedion-01/eth-calendar#readme",
   "dependencies": {
-    "lucide-react": "^1.20.0",
+    "lucide-react": "^1.73.0",
     "luxon": "^3.7.2"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-node-resolve": "^16.0.3",
-    "@rollup/plugin-terser": "^1.0.0",
-    "@rollup/plugin-typescript": "^12.3.0",
-    "@semantic-release/npm": "^13.1.5",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
+    "@rollup/plugin-terser": "^1.0.2",
+    "@rollup/plugin-typescript": "^12.3.1",
+    "@semantic-release/npm": "^13.2.0",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
     "@types/jest": "^30.0.0",
-    "@types/luxon": "^3.7.1",
-    "@types/react": "^19.2.17",
-    "jest": "^30.4.2",
-    "jest-environment-jsdom": "^30.4.1",
-    "postcss": "^8.5.15",
-    "postcss-modules": "^6.0.1",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "rollup": "^4.62.0",
-    "rollup-plugin-dts": "^6.4.1",
+    "@types/luxon": "^3.7.6",
+    "@types/react": "^19.3.0",
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2",
+    "postcss": "^8.5.33",
+    "postcss-modules": "^9.1.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "rollup": "^4.68.3",
+    "rollup-plugin-dts": "^6.5.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
-    "semantic-release": "^25.0.5",
-    "ts-jest": "^29.4.11",
+    "semantic-release": "^25.0.9",
+    "ts-jest": "^29.4.15",
     "ts-node": "^10.9.2",
-    "tslib": "^2.8.1",
+    "tslib": "^2.9.1",
     "typescript": "^6.0.3"
   },
   "peerDependencies": {
@@ -73,11 +73,15 @@
     "react-dom": "^16 || ^17 || ^18 || ^19"
   },
   "overrides": {
-    "js-yaml": "4.2.0"
+    "js-yaml": "^4.3.2",
+    "glob": "^14.0.6",
+    "minimatch": "^11.0.8"
   },
   "pnpm": {
     "overrides": {
-      "js-yaml": "4.2.0"
+      "js-yaml": "^4.3.2",
+      "glob": "^14.0.6",
+      "minimatch": "^11.0.8"
     }
   },
   "files": [

@@ -1,0 +1,33 @@
+# Keeps dependencies, the lockfile and the Actions used by CI current.
+# Security updates are raised as soon as an advisory lands, independently of the
+# weekly version-update schedule. Every PR runs the `Test` workflow, which
+# exercises the suite in four time zones plus the build.
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # One PR for the tooling, one for what ships to consumers.
+      dev-dependencies:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+      production-dependencies:
+        dependency-type: production
+    ignore:
+      # ts-jest declares `typescript >=4.3 <7`, so a TypeScript 7 bump would
+      # fail the peer range. Re-enable majors once ts-jest supports 7.x.
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly

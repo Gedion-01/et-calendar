@@ -27,7 +27,7 @@ jobs:
           node-version: "lts/*"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run tests
         run: npm test
@@ -35,12 +35,15 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Fix vulnerabilities
-        run: npm audit fix
-        continue-on-error: true
+      # Published (production) dependencies must stay clean. The remaining
+      # moderate advisories are dev-only and live inside the npm CLI that
+      # @semantic-release/npm vendors (advisories in npm's bundled tree), so they
+      # can only be cleared upstream -- tooling is therefore gated at high.
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=moderate
 
-      - name: Run npm audit (ignore low severity)
-        run: npm audit --audit-level=moderate
+      - name: Audit all dependencies (high and critical)
+        run: npm audit --audit-level=high
 
       - name: Release
         env:
