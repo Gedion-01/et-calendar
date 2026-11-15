@@ -13,7 +13,9 @@ describe("EthiopianDate", () => {
   });
 
   it("should convert Gregorian date to Ethiopian date", () => {
-    const gregorianDate = new Date(Date.UTC(2023, 8, 11)); // September 11, 2023
+    // Build the Gregorian date in local time: a UTC-midnight instant is the
+    // previous local calendar day in time zones west of UTC.
+    const gregorianDate = new Date(2023, 8, 11); // September 11, 2023
     const ethiopianDate = EthiopianDate.toEth(gregorianDate);
     expect(ethiopianDate).toEqual({ Year: 2015, Month: 13, Day: 6 });
   });
@@ -25,7 +27,83 @@ describe("EthiopianDate", () => {
       Day: 1,
     };
     const gregorianDate = EthiopianDate.toGreg(ethiopianDate);
-    expect(gregorianDate.toISOString().split("T")[0]).toBe("2023-09-12");
+
+    // Assert on the local calendar fields (an ISO string is UTC based and would
+    // report the previous day for time zones east of UTC).
+    expect(gregorianDate.getFullYear()).toBe(2023);
+    expect(gregorianDate.getMonth()).toBe(8); // September (0-based)
+    expect(gregorianDate.getDate()).toBe(12);
+  });
+
+  it("should return local midnight for the converted Gregorian date", () => {
+    const gregorianDate = EthiopianDate.toGreg({
+      Year: 2016,
+      Month: 1,
+      Day: 1,
+    });
+
+    expect(gregorianDate.getHours()).toBe(0);
+    expect(gregorianDate.getMinutes()).toBe(0);
+    expect(gregorianDate.getSeconds()).toBe(0);
+    expect(gregorianDate.getMilliseconds()).toBe(0);
+  });
+
+  it("should map an Ethiopian date to the correct Gregorian weekday", () => {
+    // Hidar 11, 2017 E.C. is Wednesday, November 20, 2024 G.C.
+    const gregorianDate = EthiopianDate.toGreg({
+      Year: 2017,
+      Month: 3,
+      Day: 11,
+    });
+
+    expect(gregorianDate.getFullYear()).toBe(2024);
+    expect(gregorianDate.getMonth()).toBe(10); // November (0-based)
+    expect(gregorianDate.getDate()).toBe(20);
+    expect(gregorianDate.getDay()).toBe(3); // Wednesday
+  });
+
+  it("should round-trip every Ethiopian date through the Gregorian calendar", () => {
+    for (let year = 2000; year <= 2030; year++) {
+      for (let month = 1; month <= 13; month++) {
+        const monthLength = EthiopianDate.ethiopianMonthLength(month, year);
+
+        for (let day = 1; day <= monthLength; day++) {
+          const ethiopianDate = { Year: year, Month: month, Day: day };
+
+          expect(
+            EthiopianDate.toEth(EthiopianDate.toGreg(ethiopianDate))
+          ).toEqual(ethiopianDate);
+        }
+      }
+    }
+  });
+
+  it("should round-trip every Gregorian day back to the same calendar day", () => {
+    const end = new Date(2026, 11, 31);
+
+    for (
+      let cursor = new Date(2020, 0, 1);
+      cursor <= end;
+      cursor.setDate(cursor.getDate() + 1)
+    ) {
+      const gregorianDate = new Date(
+        cursor.getFullYear(),
+        cursor.getMonth(),
+        cursor.getDate()
+      );
+      const ethiopianDate = EthiopianDate.toEth(gregorianDate);
+      const converted = EthiopianDate.toGreg(ethiopianDate);
+
+      expect([
+        converted.getFullYear(),
+        converted.getMonth(),
+        converted.getDate(),
+      ]).toEqual([
+        gregorianDate.getFullYear(),
+        gregorianDate.getMonth(),
+        gregorianDate.getDate(),
+      ]);
+    }
   });
 
   it("should return correct month name in Amharic", () => {
