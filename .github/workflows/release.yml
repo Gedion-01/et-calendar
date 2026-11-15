@@ -63,5 +63,11 @@ jobs:
           # Use a PAT secret instead only if releases must trigger other
           # workflows (GITHUB_TOKEN-initiated events do not).
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # A *granular* npm access token with "Read and write" permission for
+          # et-calendar (plus "Bypass 2FA" if the account uses auth-and-writes).
+          # A read-only token authenticates (npm whoami succeeds) but publishing
+          # fails with E403. Granular tokens expire, so rotate before the expiry
+          # date -- or replace this with npm trusted publishing (OIDC), which
+          # needs no secret at all.
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm run semantic-release

@@ -28,7 +28,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Gedion-01/et-calendar.git"
+    "url": "git+https://github.com/Gedion-01/et-calendar.git"
   },
   "publishConfig": {
     "access": "public"
