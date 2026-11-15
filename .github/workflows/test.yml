@@ -44,6 +44,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Type checking is time-zone independent, so run it once instead of in
+      # every matrix leg.
+      - name: Type check
+        if: matrix.tz == 'UTC'
+        run: npx tsc --noEmit -p tsconfig.json
+
       - name: Run tests
         env:
           TZ: ${{ matrix.tz }}
