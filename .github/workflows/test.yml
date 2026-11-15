@@ -1,0 +1,47 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - master
+      - beta
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test (TZ=${{ matrix.tz }})
+    runs-on: ubuntu-latest
+    strategy:
+      # Report every failing time zone instead of stopping at the first one.
+      fail-fast: false
+      matrix:
+        # The public API returns and reads local `Date` fields, so conversions
+        # must behave identically in every time zone. Each entry guards a
+        # distinct regime:
+        #   UTC              - baseline (GitHub-hosted runners default to UTC)
+        #   America/New_York - negative offset + DST (day-earlier regressions)
+        #   Australia/Sydney - positive offset + DST (day-later regressions and
+        #                      offsets parsed from local date strings)
+        #   America/Santiago - DST transition at 00:00, i.e. a day whose local
+        #                      midnight does not exist
+        tz:
+          - UTC
+          - America/New_York
+          - Australia/Sydney
+          - America/Santiago
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        env:
+          TZ: ${{ matrix.tz }}
+        run: npm test
