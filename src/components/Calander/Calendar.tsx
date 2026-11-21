@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { EthiopianDate } from "../../lib/ethiopian-date";
+import { isBetween, isSameDay } from "../../lib/civil-date";
 import { CalendarProps } from "../../types";
 import "./Calender.css";
 
@@ -14,17 +15,42 @@ export function Calendar({
   maxDate,
   clampNavigation,
   calendarClassNames = {},
+  viewDate: controlledViewDate,
+  onViewDateChange,
+  disabledDays,
+  mode = "single",
+  rangeStart,
+  rangeEnd,
+  rangePreview = false,
+  onDayHover,
 }: CalendarProps) {
-  const [viewDate, setViewDate] = useState(
+  const isViewControlled = controlledViewDate !== undefined;
+  const [internalViewDate, setInternalViewDate] = useState(
     isEthiopian ? (date as EthiopianDate.EtDate) : (date as Date),
+  );
+
+  // A parent (e.g. a multi-month range picker) can take over the visible month;
+  // otherwise the calendar keeps managing it locally.
+  const viewDate = (controlledViewDate ?? internalViewDate) as
+    | Date
+    | EthiopianDate.EtDate;
+  const setViewDate = useCallback(
+    (next: Date | EthiopianDate.EtDate) => {
+      if (!isViewControlled) setInternalViewDate(next);
+      onViewDateChange?.(next);
+    },
+    [isViewControlled, onViewDateChange],
   );
   const [currentView, setCurrentView] = useState<View>("calendar");
   const selectedDateRef = useRef<HTMLButtonElement | null>(null);
   const currentYearRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
-    setViewDate(isEthiopian ? (date as EthiopianDate.EtDate) : (date as Date));
-  }, [date, isEthiopian]);
+    if (isViewControlled) return;
+    setInternalViewDate(
+      isEthiopian ? (date as EthiopianDate.EtDate) : (date as Date),
+    );
+  }, [date, isEthiopian, isViewControlled]);
   useEffect(() => {
     if (selectedDateRef.current && currentView === "calendar") {
       selectedDateRef.current.scrollIntoView({
@@ -257,7 +283,8 @@ export function Calendar({
       const maxN = normalize(maxDate);
       const isBeforeMin = minN ? candidateDate < minN : false;
       const isAfterMax = maxN ? candidateDate > maxN : false;
-      const isDisabled = isBeforeMin || isAfterMax;
+      const isDisabled =
+        isBeforeMin || isAfterMax || (disabledDays ? disabledDays(candidateDate) : false);
 
       const isSelected = isEthiopian
         ? i === (date as EthiopianDate.EtDate).Day &&
@@ -281,8 +308,29 @@ export function Calendar({
             (viewDate as Date).getFullYear(),
           );
 
+      const isRangeStart =
+        mode === "range" && isSameDay(candidateDate, rangeStart);
+      const isRangeEnd = mode === "range" && isSameDay(candidateDate, rangeEnd);
+      const isInRange =
+        mode === "range" && isBetween(candidateDate, rangeStart, rangeEnd);
+
       days.push(
-        <div key={i} className={`day-cell ${calendarClassNames.dayCell || ""}`}>
+        <div
+          key={i}
+          className={`day-cell ${calendarClassNames.dayCell || ""} ${
+            isInRange ? calendarClassNames.inRange || "in-range" : ""
+          } ${
+            isRangeStart ? calendarClassNames.rangeStart || "range-start" : ""
+          } ${isRangeEnd ? calendarClassNames.rangeEnd || "range-end" : ""}`}
+          data-in-range={isInRange ? "" : undefined}
+          data-range-start={isRangeStart ? "" : undefined}
+          data-range-end={isRangeEnd ? "" : undefined}
+          data-range-preview={isInRange && rangePreview ? "" : undefined}
+          onMouseEnter={
+            mode === "range" ? () => onDayHover?.(candidateDate) : undefined
+          }
+          onMouseLeave={mode === "range" ? () => onDayHover?.(null) : undefined}
+        >
           <button
             type="button"
             ref={isSelected ? selectedDateRef : null}

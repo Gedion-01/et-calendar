@@ -15,6 +15,7 @@ Is the most **feature-rich React library** that provides components, hooks, and 
 
 - **DatePicker Component**: Customizable Ethiopian/Gregorian picker with min/max bounds, optional clamped navigation, and close-on-select.
 - **DateTimePicker Component**: Date + time picker with the same bounds/close-on-select behaviors and 12h/24h time support.
+- **DateRangePicker Component**: Start/end range selection with a hover preview, one or two months, Ethiopian/Gregorian tabs, min/max nights and per-day disable rules.
 - **Custom Hooks**: Hooks for formatting and manipulating dates.
 - **Utilities**: Functions for Ethiopian date conversions and operations.
 - **Fully TypeScript Supported**: Includes comprehensive type definitions for better TypeScript integration.
@@ -110,6 +111,40 @@ function App() {
 
 export default App;
 ```
+
+### DateRangePicker
+
+Selects a start/end range, with a preview band while the second day is only hovered. It shows two months on wider viewports and one on phones.
+
+```tsx
+import { useState } from "react";
+import { DateRangePicker } from "et-calendar";
+import type { DateRange } from "et-calendar";
+
+function App() {
+  const [range, setRange] = useState<DateRange>({});
+
+  return (
+    <DateRangePicker
+      value={range} // { start?: Date; end?: Date }
+      onChange={setRange} // fires once the end is picked
+      showCalendars="both" // Options: "gregorian" | "ethiopian" | "both"
+      viewFirst="Ethiopian" // First tab, and the calendar used for the trigger label
+      numberOfMonths={2} // Defaults to 2 on >=640px, 1 below
+      minNights={1} // Reject a same-day range
+      maxNights={30}
+      minDate={new Date(2020, 0, 1)}
+      maxDate={new Date(2090, 11, 31)}
+      disabledDays={(day) => day.getDay() === 0} // Sundays cannot be picked
+      closeOnSelect // Close once both ends are chosen
+    />
+  );
+}
+```
+
+Picking a day earlier than the pending start **restarts** the range (that day becomes the new start). Days that would break `minNights`/`maxNights`, or that `disabledDays` rejects, are rendered disabled. `onChange` only fires for a complete range, so both `start` and `end` are set whenever it is called.
+
+The range uses the calendar's own colour tokens (`--selected-background-color`, `--selected-text-color`, `--selected-hover-background-color`, `--background-color`), so overriding those variables themes the single-date and range pickers together.
 
 ### EthiopianDate Utilities
 
@@ -284,6 +319,36 @@ import { DateTimePicker } from "et-calendar";
 - `popoverProps?: PopoverProps` — Popover positioning tweaks.
 - `ethiopianTabName?: string` / `gregorianTabName?: string` — Custom tab labels.
 
+#### DateRangePicker
+
+A component for selecting a start/end range using Ethiopian or Gregorian calendars.
+
+##### Importing
+
+```tsx
+import { DateRangePicker } from "et-calendar";
+import type { DateRange } from "et-calendar";
+```
+
+**Props**
+
+- `value?: DateRange` / `defaultValue?: DateRange` — Controlled / initial range, `{ start?: Date; end?: Date }`.
+- `onChange: (range: DateRange) => void` — Called when a complete range is picked.
+- `minDate?: Date` / `maxDate?: Date` — Selectable bounds.
+- `minNights?: number` / `maxNights?: number` — Allowed number of nights between the two ends.
+- `numberOfMonths?: 1 | 2 | 3` — Visible months. Default: 2 on viewports of 640 px or wider, 1 below.
+- `showCalendars?: 'ethiopian' | 'gregorian' | 'both'` — Which calendars to display. Default: "both".
+- `viewFirst?: 'Ethiopian' | 'Gregorian'` — First tab, and the calendar used for the trigger label. Default: "Gregorian".
+- `dateFormat?: string` — Trigger format (time tokens are ignored).
+- `rangeSeparator?: string` — Text between the two dates. Default: " – ".
+- `placeholder?: string` — Trigger text when nothing is selected.
+- `disabledDays?: (date: Date) => boolean` — Days that can never be selected (holidays, blackout dates).
+- `closeOnSelect?: boolean` — Close the popover when the range completes. Default: true.
+- `datePickerClassNames?: DateRangePickerClassNames` — Styling hooks: `container`, `triggerButton`, `triggerSummary`, `popoverPanel`, `tabsList`, `tabsTrigger`, `tabsContent`, `monthsWrapper`, `icon`, `placeholder`.
+- `calanderClassNames?: CalendarClassNames` — Calendar grid hooks, including `inRange`, `rangeStart` and `rangeEnd`.
+- `popoverProps?: PopoverProps` — Popover positioning tweaks.
+- `ethiopianTabName?: string` / `gregorianTabName?: string` — Custom tab labels.
+
 ### EthiopianDate Namespace
 
 A collection of functions and types for Ethiopian date operations and conversions.
@@ -345,7 +410,26 @@ interface EtDateTime extends EtDate {
 - `ethiopianMonthLength(month: number, year: number): number`  
   Returns the number of days in a given Ethiopian month.
 
-- Additional Utility Functions
+#### Calendar-day helpers
+
+Also exported from `et-calendar/lib`. Every helper works on the local calendar fields of a `Date` and converts to a day number before doing arithmetic, so results are identical in every time zone and never drift across a DST boundary. Use these instead of subtracting timestamps or comparing `toISOString()` values.
+
+```ts
+import { addDays, differenceInDays, isSameDay } from "et-calendar/lib";
+
+differenceInDays(new Date(2024, 1, 10), new Date(2024, 1, 3)); // 7
+addDays(new Date(2024, 1, 28), 1).getDate(); // 29 (leap year)
+isSameDay(new Date(2024, 0, 5, 1), new Date(2024, 0, 5, 23)); // true
+```
+
+- `toDayNumber(date: Date): number` — days since 1970-01-01 for the local calendar date.
+- `fromDayNumber(dayNumber: number): Date` — local midnight of that calendar day.
+- `addDays(date: Date, days: number): Date`
+- `differenceInDays(to: Date, from: Date): number` — whole days; use this for "nights".
+- `isSameDay(a?: Date | null, b?: Date | null): boolean`
+- `isBetween(date: Date, start?: Date | null, end?: Date | null): boolean` — exclusive, order agnostic.
+- `startOfMonth(date: Date): Date` / `endOfMonth(date: Date): Date`
+- `clampDate(date: Date, min?: Date, max?: Date): Date` — bounds are inclusive.
 
 ### Hooks
 
@@ -509,13 +593,51 @@ const formattedEthDateTime = useFormattedEthiopianDateTime(
 console.log(formattedEthDateTime); // Outputs: "መስከረም 01, 2015 14:30"
 ```
 
+## Theming
+
+Every colour is a CSS variable, so the components follow your design system without a build step. Override the tokens on `:root` (or on any wrapper element):
+
+```css
+:root {
+  --selected-background-color: #0f766e;
+  --selected-hover-background-color: #115e59;
+  --selected-text-color: #ffffff;
+}
+```
+
+| Group | Variables |
+| --- | --- |
+| Surfaces | `--background-color`, `--text-color`, `--border-color`, `--shadow-color`, `--button-text-color`, `--placeholder-color` |
+| Popover | `--popover-background-color`, `--popover-border-color`, `--popover-shadow-color` |
+| Calendar | `--hover-background-color`, `--today-background-color`, `--today-hover-background-color`, `--weekday-text-color`, `--selected-background-color`, `--selected-hover-background-color`, `--selected-text-color` |
+| Tabs | `--tabs-background-color`, `--tabs-text-color`, `--tabs-active-background-color`, `--tabs-active-shadow-color`, `--focus-ring-color`, `--focus-ring-opacity` |
+| Time picker | `--heading-color`, `--time-format-label-color`, `--switch-background-color`, `--switch-thumb-color`, `--divider-color`, `--active-color`, `--active-hover-color`, `--am-pm-button-*`, `--active-am-pm-button-*` |
+
+### Dark mode
+
+The package ships a dark token set, so anything that toggles a `dark` class works out of the box — next-themes with `attribute="class"`, Tailwind's `darkMode: "class"`, or a plain wrapper:
+
+```tsx
+<html className="dark">
+  <body>{/* DatePicker, DateTimePicker, DateRangePicker */}</body>
+</html>
+```
+
+Because the range band is derived from `--selected-background-color`, a single override restyles the single-date pickers and the range picker together.
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or fixes.
 
 ## Future Plans
 
-plan to add date range pickers in future releases. Stay tuned for updates!
+Date range selection is available through `DateRangePicker`. Planned next:
+
+- Range presets ("Last 7 days", "This Ethiopian month", ...).
+- Keyboard navigation and screen-reader labels for the calendar grid.
+- Ethiopian clock (6:00 = 00:00) option for the time picker.
+- Amharic (Ge'ez) numerals option.
+- `DateTimeRangePicker`.
 
 ## License
 

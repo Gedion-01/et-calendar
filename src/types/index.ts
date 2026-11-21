@@ -1,6 +1,6 @@
 import { EthiopianDate } from "../lib/ethiopian-date";
 
-interface DatePickerClassNames {
+export interface DatePickerClassNames {
   container?: string;
   popoverPanel?: string;
   triggerButton?: string;
@@ -31,6 +31,10 @@ interface CalendarClassNames {
   monthButton?: string;
   yearButton?: string;
   icon?: string;
+  // Range selection
+  inRange?: string;
+  rangeStart?: string;
+  rangeEnd?: string;
 }
 
 interface TimePickerClassNames {
@@ -105,6 +109,44 @@ export interface DateTimePickerProps {
   gregorianTabName?: string;
 }
 
+export interface DateRangePickerClassNames extends DatePickerClassNames {
+  monthsWrapper?: string;
+  triggerSummary?: string;
+}
+
+export interface DateRangePickerProps {
+  /** Controlled range. */
+  value?: DateRange;
+  defaultValue?: DateRange;
+  onChange: (range: DateRange) => void;
+
+  minDate?: Date;
+  maxDate?: Date;
+  /** Minimum/maximum nights between start and end. */
+  minNights?: number;
+  maxNights?: number;
+
+  /** 2 on >=640px, 1 below; pass to override. */
+  numberOfMonths?: 1 | 2 | 3;
+  showCalendars?: "ethiopian" | "gregorian" | "both";
+  viewFirst?: "Ethiopian" | "Gregorian";
+
+  dateFormat?: string;
+  rangeSeparator?: string;
+  placeholder?: string;
+
+  /** Days that can never be selected (holidays, blackout dates, ...). */
+  disabledDays?: (date: Date) => boolean;
+  /** Close the popover once the end of the range is picked. */
+  closeOnSelect?: boolean;
+
+  datePickerClassNames?: DateRangePickerClassNames;
+  calanderClassNames?: CalendarClassNames;
+  popoverProps?: PopoverProps;
+  ethiopianTabName?: string;
+  gregorianTabName?: string;
+}
+
 export interface CalendarProps {
   date: Date | EthiopianDate.EtDate;
   onChange: (date: any) => void;
@@ -113,7 +155,26 @@ export interface CalendarProps {
   maxDate?: Date;
   clampNavigation?: boolean;
 
+  /** Controlled visible month; omit to let the calendar manage it. */
+  viewDate?: Date | EthiopianDate.EtDate;
+  onViewDateChange?: (viewDate: Date | EthiopianDate.EtDate) => void;
+  /** Extra per-day disable rule (holidays, blackout dates, ...). */
+  disabledDays?: (date: Date) => boolean;
+
+  /** Selection model; `range` renders the band between start and end. */
+  mode?: "single" | "range";
+  rangeStart?: Date | null;
+  rangeEnd?: Date | null;
+  /** Style the band as a preview (start picked, end not committed yet). */
+  rangePreview?: boolean;
+  onDayHover?: (date: Date | null) => void;
+
   calendarClassNames?: CalendarClassNames;
+}
+
+export interface DateRange {
+  start?: Date;
+  end?: Date;
 }
 
 export type TimeFormat = "12h" | "24h";
