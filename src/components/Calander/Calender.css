@@ -251,3 +251,34 @@
     --hover-background-color
   ); /* Replaces 'hover:bg-gray-100' */
 }
+
+/* Range selection */
+.day-cell[data-in-range] {
+  background-color: var(--range-background-color, #e8f0fe);
+}
+
+.day-cell[data-range-start] {
+  border-start-start-radius: 9999px;
+  border-end-start-radius: 9999px;
+  background-color: var(--range-background-color, #e8f0fe);
+}
+
+.day-cell[data-range-end] {
+  border-start-end-radius: 9999px;
+  border-end-end-radius: 9999px;
+  background-color: var(--range-background-color, #e8f0fe);
+}
+
+.day-cell[data-range-start][data-range-end] {
+  border-radius: 9999px;
+}
+
+.day-cell[data-in-range] .day-button,
+.day-cell[data-range-start] .day-button,
+.day-cell[data-range-end] .day-button {
+  background: transparent;
+}
+
+.day-cell[data-range-preview] {
+  opacity: 0.65;
+}

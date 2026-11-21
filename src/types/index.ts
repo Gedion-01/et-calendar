@@ -31,6 +31,10 @@ interface CalendarClassNames {
   monthButton?: string;
   yearButton?: string;
   icon?: string;
+  // Range selection
+  inRange?: string;
+  rangeStart?: string;
+  rangeEnd?: string;
 }
 
 interface TimePickerClassNames {
@@ -119,7 +123,20 @@ export interface CalendarProps {
   /** Extra per-day disable rule (holidays, blackout dates, ...). */
   disabledDays?: (date: Date) => boolean;
 
+  /** Selection model; `range` renders the band between start and end. */
+  mode?: "single" | "range";
+  rangeStart?: Date | null;
+  rangeEnd?: Date | null;
+  /** Style the band as a preview (start picked, end not committed yet). */
+  rangePreview?: boolean;
+  onDayHover?: (date: Date | null) => void;
+
   calendarClassNames?: CalendarClassNames;
+}
+
+export interface DateRange {
+  start?: Date;
+  end?: Date;
 }
 
 export type TimeFormat = "12h" | "24h";

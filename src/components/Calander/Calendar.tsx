@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { EthiopianDate } from "../../lib/ethiopian-date";
+import { isBetween, isSameDay } from "../../lib/civil-date";
 import { CalendarProps } from "../../types";
 import "./Calender.css";
 
@@ -17,6 +18,11 @@ export function Calendar({
   viewDate: controlledViewDate,
   onViewDateChange,
   disabledDays,
+  mode = "single",
+  rangeStart,
+  rangeEnd,
+  rangePreview = false,
+  onDayHover,
 }: CalendarProps) {
   const isViewControlled = controlledViewDate !== undefined;
   const [internalViewDate, setInternalViewDate] = useState(
@@ -302,8 +308,29 @@ export function Calendar({
             (viewDate as Date).getFullYear(),
           );
 
+      const isRangeStart =
+        mode === "range" && isSameDay(candidateDate, rangeStart);
+      const isRangeEnd = mode === "range" && isSameDay(candidateDate, rangeEnd);
+      const isInRange =
+        mode === "range" && isBetween(candidateDate, rangeStart, rangeEnd);
+
       days.push(
-        <div key={i} className={`day-cell ${calendarClassNames.dayCell || ""}`}>
+        <div
+          key={i}
+          className={`day-cell ${calendarClassNames.dayCell || ""} ${
+            isInRange ? calendarClassNames.inRange || "in-range" : ""
+          } ${
+            isRangeStart ? calendarClassNames.rangeStart || "range-start" : ""
+          } ${isRangeEnd ? calendarClassNames.rangeEnd || "range-end" : ""}`}
+          data-in-range={isInRange ? "" : undefined}
+          data-range-start={isRangeStart ? "" : undefined}
+          data-range-end={isRangeEnd ? "" : undefined}
+          data-range-preview={isInRange && rangePreview ? "" : undefined}
+          onMouseEnter={
+            mode === "range" ? () => onDayHover?.(candidateDate) : undefined
+          }
+          onMouseLeave={mode === "range" ? () => onDayHover?.(null) : undefined}
+        >
           <button
             type="button"
             ref={isSelected ? selectedDateRef : null}
