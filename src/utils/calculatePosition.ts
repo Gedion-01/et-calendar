@@ -2,10 +2,17 @@ import { Position, Placement, Alignment, PositionConfig } from "../types";
 
 const VIEWPORT_PADDING = 8;
 
+/**
+ * Only the laid-out size is needed for the panel. Using the bounding rect here
+ * would fold the entrance transform (scale) into the measurement and shift the
+ * panel by a few pixels.
+ */
+export type PanelSize = Pick<DOMRect, "width" | "height">;
+
 function calculateAlignmentOffset(
   basePosition: Position,
   triggerRect: DOMRect,
-  contentRect: DOMRect,
+  contentRect: PanelSize,
   align: Alignment,
   alignOffset: number,
   isVertical: boolean
@@ -46,7 +53,7 @@ function calculateAlignmentOffset(
 
 export function calculatePosition(
   triggerRect: DOMRect,
-  contentRect: DOMRect,
+  contentRect: PanelSize,
   config: PositionConfig
 ): { position: Position; actualPlacement: Placement } {
   const { placement, align, sideOffset, alignOffset } = config;
