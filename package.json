@@ -34,9 +34,9 @@
     "access": "public"
   },
   "bugs": {
-    "url": "https://github.com/Gedion-01/eth-calendar/issues"
+    "url": "https://github.com/Gedion-01/et-calendar/issues"
   },
-  "homepage": "https://github.com/Gedion-01/eth-calendar#readme",
+  "homepage": "https://github.com/Gedion-01/et-calendar#readme",
   "dependencies": {
     "lucide-react": "^1.73.0",
     "luxon": "^3.7.2"
