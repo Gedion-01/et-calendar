@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # semantic-release needs the full history: it analyses every commit
           # since the last tag and pushes a refs/notes/semantic-release-<version>
