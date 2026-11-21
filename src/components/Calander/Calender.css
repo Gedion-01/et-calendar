@@ -252,21 +252,33 @@
   ); /* Replaces 'hover:bg-gray-100' */
 }
 
-/* Range selection */
-.day-cell[data-in-range] {
-  background-color: var(--range-background-color, #e8f0fe);
+/* Range selection -- same palette as the single-date selection. */
+.day-cell[data-in-range],
+.day-cell[data-range-start],
+.day-cell[data-range-end] {
+  /* fallback for engines without color-mix() */
+  background-color: var(--today-background-color);
+  background-color: color-mix(
+    in srgb,
+    var(--selected-background-color) 18%,
+    var(--background-color)
+  );
+}
+
+/* The two ends wear the selected-day colours. */
+.day-cell[data-range-start],
+.day-cell[data-range-end] {
+  background-color: var(--selected-background-color);
 }
 
 .day-cell[data-range-start] {
   border-start-start-radius: 9999px;
   border-end-start-radius: 9999px;
-  background-color: var(--range-background-color, #e8f0fe);
 }
 
 .day-cell[data-range-end] {
   border-start-end-radius: 9999px;
   border-end-end-radius: 9999px;
-  background-color: var(--range-background-color, #e8f0fe);
 }
 
 .day-cell[data-range-start][data-range-end] {
@@ -279,6 +291,24 @@
   background: transparent;
 }
 
+.day-cell[data-range-start] .day-button,
+.day-cell[data-range-end] .day-button {
+  color: var(--selected-text-color);
+}
+
+/* Hovering an end keeps the selected-hover tone instead of the grey one. */
+.day-cell[data-range-start]:hover .day-button,
+.day-cell[data-range-end]:hover .day-button {
+  background-color: var(--selected-hover-background-color);
+  color: var(--selected-text-color);
+}
+
+/* Preview band: same hue, lighter, while the end is only hovered. */
 .day-cell[data-range-preview] {
-  opacity: 0.65;
+  background-color: var(--hover-background-color);
+  background-color: color-mix(
+    in srgb,
+    var(--selected-background-color) 10%,
+    var(--background-color)
+  );
 }
