@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { EthiopianDate } from "../../lib/ethiopian-date";
 import { CalendarProps } from "../../types";
@@ -14,17 +14,37 @@ export function Calendar({
   maxDate,
   clampNavigation,
   calendarClassNames = {},
+  viewDate: controlledViewDate,
+  onViewDateChange,
+  disabledDays,
 }: CalendarProps) {
-  const [viewDate, setViewDate] = useState(
+  const isViewControlled = controlledViewDate !== undefined;
+  const [internalViewDate, setInternalViewDate] = useState(
     isEthiopian ? (date as EthiopianDate.EtDate) : (date as Date),
+  );
+
+  // A parent (e.g. a multi-month range picker) can take over the visible month;
+  // otherwise the calendar keeps managing it locally.
+  const viewDate = (controlledViewDate ?? internalViewDate) as
+    | Date
+    | EthiopianDate.EtDate;
+  const setViewDate = useCallback(
+    (next: Date | EthiopianDate.EtDate) => {
+      if (!isViewControlled) setInternalViewDate(next);
+      onViewDateChange?.(next);
+    },
+    [isViewControlled, onViewDateChange],
   );
   const [currentView, setCurrentView] = useState<View>("calendar");
   const selectedDateRef = useRef<HTMLButtonElement | null>(null);
   const currentYearRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
-    setViewDate(isEthiopian ? (date as EthiopianDate.EtDate) : (date as Date));
-  }, [date, isEthiopian]);
+    if (isViewControlled) return;
+    setInternalViewDate(
+      isEthiopian ? (date as EthiopianDate.EtDate) : (date as Date),
+    );
+  }, [date, isEthiopian, isViewControlled]);
   useEffect(() => {
     if (selectedDateRef.current && currentView === "calendar") {
       selectedDateRef.current.scrollIntoView({
@@ -257,7 +277,8 @@ export function Calendar({
       const maxN = normalize(maxDate);
       const isBeforeMin = minN ? candidateDate < minN : false;
       const isAfterMax = maxN ? candidateDate > maxN : false;
-      const isDisabled = isBeforeMin || isAfterMax;
+      const isDisabled =
+        isBeforeMin || isAfterMax || (disabledDays ? disabledDays(candidateDate) : false);
 
       const isSelected = isEthiopian
         ? i === (date as EthiopianDate.EtDate).Day &&

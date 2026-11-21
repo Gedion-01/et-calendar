@@ -113,6 +113,12 @@ export interface CalendarProps {
   maxDate?: Date;
   clampNavigation?: boolean;
 
+  /** Controlled visible month; omit to let the calendar manage it. */
+  viewDate?: Date | EthiopianDate.EtDate;
+  onViewDateChange?: (viewDate: Date | EthiopianDate.EtDate) => void;
+  /** Extra per-day disable rule (holidays, blackout dates, ...). */
+  disabledDays?: (date: Date) => boolean;
+
   calendarClassNames?: CalendarClassNames;
 }
 
