@@ -41,15 +41,20 @@ export function DatePicker({
 }: DatePickerProps) {
   const sanitizedFormat = sanitizeDateFormat(dateFormat);
 
+  // Call both formatters unconditionally. They are cheap, and calling one or the
+  // other conditionally breaks the rules of hooks as soon as either becomes
+  // stateful.
+  const gregorianLabel = selectedDate
+    ? useFormattedDate(selectedDate, sanitizedFormat)
+    : sanitizedFormat;
+  const ethiopianLabel = selectedDate
+    ? useFormattedEthiopianDate(
+        EthiopianDate.toEth(selectedDate),
+        sanitizedFormat,
+      )
+    : sanitizedFormat;
   const formattedDate =
-    selectedDate && viewFirst === "Ethiopian"
-      ? useFormattedEthiopianDate(
-          EthiopianDate.toEth(selectedDate),
-          sanitizedFormat,
-        )
-      : selectedDate
-        ? useFormattedDate(selectedDate, sanitizedFormat)
-        : sanitizedFormat;
+    viewFirst === "Ethiopian" ? ethiopianLabel : gregorianLabel;
 
   // Optionally enforce the initial selectedDate to be within [minDate, maxDate]
   useEffect(() => {
