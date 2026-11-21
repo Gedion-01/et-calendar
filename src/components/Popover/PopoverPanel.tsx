@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { usePopoverContext } from "./PopoverContext";
 import { calculatePosition } from "../../utils/calculatePosition";
 import "./Popover.css";
@@ -22,47 +23,69 @@ export function PopoverPanel({
   alignOffset = 0,
 }: PopoverPanelProps) {
   const { isOpen, setIsOpen, triggerRef, contentRef } = usePopoverContext();
+  const [canPortal, setCanPortal] = useState(false);
 
   useEffect(() => {
-    if (!isOpen || !triggerRef.current || !contentRef.current) return;
+    setCanPortal(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const panel = contentRef.current;
+    const trigger = triggerRef.current;
+    if (!panel || !trigger) return;
 
     const updatePosition = () => {
-      const triggerRect = triggerRef.current?.getBoundingClientRect();
-      const contentRect = contentRef.current?.getBoundingClientRect();
+      // Viewport coordinates: the panel is portalled to <body> and positioned
+      // `fixed`, so it is not affected by any transformed/filtered ancestor
+      // (which would otherwise become its containing block and shift it).
+      const triggerRect = trigger.getBoundingClientRect();
 
-      if (!triggerRect || !contentRect) return;
+      // Layout size, not the bounding rect -- the entrance animation scales the
+      // panel, and getBoundingClientRect() would report the scaled size.
+      const panelSize = {
+        width: panel.offsetWidth,
+        height: panel.offsetHeight,
+      };
 
       const { position, actualPlacement } = calculatePosition(
         triggerRect,
-        contentRect,
-        {
-          placement: anchor,
-          align,
-          sideOffset,
-          alignOffset,
-        }
+        panelSize,
+        { placement: anchor, align, sideOffset, alignOffset }
       );
 
-      if (contentRef.current) {
-        contentRef.current.style.left = `${position.x}px`;
-        contentRef.current.style.top = `${position.y}px`;
-        contentRef.current.dataset.placement = actualPlacement;
-      }
+      panel.style.left = `${position.x}px`;
+      panel.style.top = `${position.y}px`;
+      panel.dataset.placement = actualPlacement;
     };
 
     updatePosition();
 
-    const handleScroll = () => requestAnimationFrame(updatePosition);
-    const handleResize = () => requestAnimationFrame(updatePosition);
+    // The panel resizes while open (5 vs 6 week rows, tab switch, late fonts),
+    // so re-position whenever its layout size changes.
+    const observer =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(() => updatePosition());
+    observer?.observe(panel);
 
-    window.addEventListener("scroll", handleScroll, true);
-    window.addEventListener("resize", handleResize);
+    let frame = 0;
+    const scheduleUpdate = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(updatePosition);
+    };
+
+    window.addEventListener("scroll", scheduleUpdate, true);
+    window.addEventListener("resize", scheduleUpdate);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll, true);
-      window.removeEventListener("resize", handleResize);
+      observer?.disconnect();
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleUpdate, true);
+      window.removeEventListener("resize", scheduleUpdate);
     };
-  }, [isOpen, anchor, align, sideOffset, alignOffset]);
+  }, [isOpen, anchor, align, sideOffset, alignOffset, triggerRef, contentRef]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -83,11 +106,11 @@ export function PopoverPanel({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen, setIsOpen]);
+  }, [isOpen, setIsOpen, contentRef, triggerRef]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !canPortal) return null;
 
-  return (
+  return createPortal(
     <div
       ref={contentRef}
       className={`popover-panel ${className}`}
@@ -99,6 +122,7 @@ export function PopoverPanel({
       role="dialog"
     >
       {children}
-    </div>
+    </div>,
+    document.body
   );
 }
