@@ -1,0 +1,73 @@
+/**
+ * Dark theme.
+ *
+ * Every colour in the library is a CSS variable, so a single set of overrides
+ * is enough. Set the class on <html> (as next-themes does with
+ * `attribute="class"`) or on any wrapper element:
+ *
+ *   <html class="dark">  …  </html>
+ *   <div class="dark">   …  </div>
+ *
+ * `html.dark` outranks the library's own `:root` block, and a `.dark` wrapper
+ * wins by inheritance for everything inside it.
+ */
+html.dark,
+.dark {
+  /* surfaces + text */
+  --background-color: #09090b;
+  --text-color: #f4f4f5;
+  --button-text-color: #e4e4e7;
+  --placeholder-color: #a1a1aa;
+  --border-color: #27272a;
+  --shadow-color: rgba(0, 0, 0, 0.45);
+
+  /* popover */
+  --popover-background-color: #09090b;
+  --popover-border-color: #27272a;
+  --popover-shadow-color: rgba(0, 0, 0, 0.6);
+
+  /* calendar grid */
+  --hover-background-color: #27272a;
+  --today-background-color: #27272a;
+  --today-hover-background-color: #3f3f46;
+  --weekday-text-color: #a1a1aa;
+  --selected-background-color: #3b82f6;
+  --selected-hover-background-color: #2563eb;
+  --selected-text-color: #ffffff;
+
+  /* Ethiopian / Gregorian tabs */
+  --tabs-background-color: #18181b;
+  --tabs-text-color: #a1a1aa;
+  --tabs-active-background-color: #27272a;
+  --tabs-active-shadow-color: rgba(0, 0, 0, 0.4);
+  --focus-ring-color: #60a5fa;
+  --focus-ring-opacity: 0.4;
+
+  /* time picker */
+  --heading-color: #f4f4f5;
+  --time-format-label-color: #a1a1aa;
+  --switch-background-color: #3f3f46;
+  --switch-thumb-color: #ffffff;
+  --divider-color: #27272a;
+  --active-color: #60a5fa;
+  --active-hover-color: #3b82f6;
+  --am-pm-button-background-color: #18181b;
+  --am-pm-button-hover-background-color: #27272a;
+  --active-am-pm-button-background-color: #3b82f6;
+  --active-am-pm-button-hover-background-color: #2563eb;
+}
+
+/* The panel background is a literal `white` in Popover.css. */
+.dark .popover-panel {
+  background-color: var(--popover-background-color);
+  color: var(--text-color);
+}
+
+/* The active tab label otherwise inherits the muted tab colour. */
+.dark .tabs-trigger {
+  color: var(--tabs-text-color);
+}
+
+.dark .tabs-trigger.active {
+  color: var(--text-color);
+}
