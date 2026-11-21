@@ -593,6 +593,38 @@ const formattedEthDateTime = useFormattedEthiopianDateTime(
 console.log(formattedEthDateTime); // Outputs: "መስከረም 01, 2015 14:30"
 ```
 
+## Theming
+
+Every colour is a CSS variable, so the components follow your design system without a build step. Override the tokens on `:root` (or on any wrapper element):
+
+```css
+:root {
+  --selected-background-color: #0f766e;
+  --selected-hover-background-color: #115e59;
+  --selected-text-color: #ffffff;
+}
+```
+
+| Group | Variables |
+| --- | --- |
+| Surfaces | `--background-color`, `--text-color`, `--border-color`, `--shadow-color`, `--button-text-color`, `--placeholder-color` |
+| Popover | `--popover-background-color`, `--popover-border-color`, `--popover-shadow-color` |
+| Calendar | `--hover-background-color`, `--today-background-color`, `--today-hover-background-color`, `--weekday-text-color`, `--selected-background-color`, `--selected-hover-background-color`, `--selected-text-color` |
+| Tabs | `--tabs-background-color`, `--tabs-text-color`, `--tabs-active-background-color`, `--tabs-active-shadow-color`, `--focus-ring-color`, `--focus-ring-opacity` |
+| Time picker | `--heading-color`, `--time-format-label-color`, `--switch-background-color`, `--switch-thumb-color`, `--divider-color`, `--active-color`, `--active-hover-color`, `--am-pm-button-*`, `--active-am-pm-button-*` |
+
+### Dark mode
+
+The package ships a dark token set, so anything that toggles a `dark` class works out of the box — next-themes with `attribute="class"`, Tailwind's `darkMode: "class"`, or a plain wrapper:
+
+```tsx
+<html className="dark">
+  <body>{/* DatePicker, DateTimePicker, DateRangePicker */}</body>
+</html>
+```
+
+Because the range band is derived from `--selected-background-color`, a single override restyles the single-date pickers and the range picker together.
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or fixes.
