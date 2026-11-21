@@ -1,0 +1,17 @@
+/* Range picker shell: the trigger reuses .date-picker-container/.trigger-button */
+.range-picker-container {
+  gap: 0.25rem;
+}
+
+.range-months {
+  display: grid;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+/* One month on phones, whatever the grid says. */
+@media (max-width: 639px) {
+  .range-months {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}

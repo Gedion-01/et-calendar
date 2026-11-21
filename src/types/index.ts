@@ -1,6 +1,6 @@
 import { EthiopianDate } from "../lib/ethiopian-date";
 
-interface DatePickerClassNames {
+export interface DatePickerClassNames {
   container?: string;
   popoverPanel?: string;
   triggerButton?: string;
@@ -103,6 +103,44 @@ export interface DateTimePickerProps {
   closeOnSelect?: boolean;
   datePickerClassNames?: DatePickerClassNames;
   timePickerClassNames?: TimePickerClassNames;
+  calanderClassNames?: CalendarClassNames;
+  popoverProps?: PopoverProps;
+  ethiopianTabName?: string;
+  gregorianTabName?: string;
+}
+
+export interface DateRangePickerClassNames extends DatePickerClassNames {
+  monthsWrapper?: string;
+  triggerSummary?: string;
+}
+
+export interface DateRangePickerProps {
+  /** Controlled range. */
+  value?: DateRange;
+  defaultValue?: DateRange;
+  onChange: (range: DateRange) => void;
+
+  minDate?: Date;
+  maxDate?: Date;
+  /** Minimum/maximum nights between start and end. */
+  minNights?: number;
+  maxNights?: number;
+
+  /** 2 on >=640px, 1 below; pass to override. */
+  numberOfMonths?: 1 | 2 | 3;
+  showCalendars?: "ethiopian" | "gregorian" | "both";
+  viewFirst?: "Ethiopian" | "Gregorian";
+
+  dateFormat?: string;
+  rangeSeparator?: string;
+  placeholder?: string;
+
+  /** Days that can never be selected (holidays, blackout dates, ...). */
+  disabledDays?: (date: Date) => boolean;
+  /** Close the popover once the end of the range is picked. */
+  closeOnSelect?: boolean;
+
+  datePickerClassNames?: DateRangePickerClassNames;
   calanderClassNames?: CalendarClassNames;
   popoverProps?: PopoverProps;
   ethiopianTabName?: string;

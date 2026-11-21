@@ -26,7 +26,8 @@ export interface UseRangeSelectionResult {
   displayEnd: Date | null;
   isPreviewing: boolean;
   isDaySelectable: (date: Date) => boolean;
-  selectDay: (date: Date) => void;
+  /** Returns true when the pick completed a range. */
+  selectDay: (date: Date) => boolean;
   setHoveredDay: (date: Date | null) => void;
   reset: () => void;
 }
@@ -84,14 +85,14 @@ export function useRangeSelection({
   );
 
   const selectDay = useCallback(
-    (date: Date) => {
+    (date: Date): boolean => {
       const day = clampDate(date, minDate, maxDate);
-      if (disabledDays?.(day)) return;
+      if (disabledDays?.(day)) return false;
 
       if (!anchor) {
         setAnchor(day);
         setHovered(null);
-        return;
+        return false;
       }
 
       const nights = differenceInDays(day, anchor);
@@ -99,15 +100,16 @@ export function useRangeSelection({
         // Restart (Option A) rather than swapping the ends.
         setAnchor(day);
         setHovered(null);
-        return;
+        return false;
       }
-      if (minNights !== undefined && nights < minNights) return;
-      if (maxNights !== undefined && nights > maxNights) return;
+      if (minNights !== undefined && nights < minNights) return false;
+      if (maxNights !== undefined && nights > maxNights) return false;
 
       const next = { start: anchor, end: day };
       setAnchor(null);
       setHovered(null);
       commit(next);
+      return true;
     },
     [anchor, commit, disabledDays, maxDate, maxNights, minDate, minNights]
   );
