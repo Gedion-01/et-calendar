@@ -47,7 +47,7 @@
     "@rollup/plugin-terser": "^1.0.2",
     "@rollup/plugin-typescript": "^12.3.1",
     "@semantic-release/npm": "^13.2.0",
-    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/jest-dom": "^8.0.0",
     "@testing-library/react": "^16.3.3",
     "@types/jest": "^30.0.0",
     "@types/luxon": "^3.7.6",
