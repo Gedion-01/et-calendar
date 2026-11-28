@@ -63,7 +63,7 @@
     "rollup-plugin-dts": "^6.5.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
-    "semantic-release": "^25.0.9",
+    "semantic-release": "^26.0.1",
     "ts-jest": "^29.4.15",
     "ts-node": "^10.9.2",
     "tslib": "^2.9.1",
