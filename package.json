@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/Gedion-01/et-calendar#readme",
   "dependencies": {
-    "lucide-react": "^1.73.0",
+    "lucide-react": "^1.77.0",
     "luxon": "^3.7.2"
   },
   "devDependencies": {
